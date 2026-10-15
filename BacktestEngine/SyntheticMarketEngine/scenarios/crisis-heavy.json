@@ -1,9 +1,0 @@
-{
-  "Name": "crisis-heavy",
-  "VolatilityMultiplier": 2.0,
-  "DriftMultiplier": 1.25,
-  "TickRateMultiplier": 1.5,
-  "SpreadMultiplier": 2.5,
-  "JumpRateMultiplier": 6.0,
-  "CrisisProbabilityMultiplier": 4.0
-}
