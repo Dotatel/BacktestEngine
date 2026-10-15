@@ -1,0 +1,9 @@
+{
+  "Name": "baseline",
+  "VolatilityMultiplier": 1.0,
+  "DriftMultiplier": 1.0,
+  "TickRateMultiplier": 1.0,
+  "SpreadMultiplier": 1.0,
+  "JumpRateMultiplier": 1.0,
+  "CrisisProbabilityMultiplier": 1.0
+}

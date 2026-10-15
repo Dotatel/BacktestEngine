@@ -1,0 +1,14 @@
+{
+  "Chart": {
+    "Symbol": "XAUUSD",
+    "Period": "m1"
+  },
+  "Parameters": {
+    "OutputDirectory": "BacktestEngineDataDump",
+    "CaptureTicks": true,
+    "MaxTicks": 0,
+    "FlushEveryTicks": 10000,
+    "StopAtMaxTicks": true,
+    "IncludeAccountNumber": false
+  }
+}

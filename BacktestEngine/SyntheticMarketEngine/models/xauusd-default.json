@@ -1,0 +1,27 @@
+{
+  "SchemaVersion": 1,
+  "Name": "xauusd-hybrid-gjr-skewt-v1",
+  "Symbol": "XAUUSD",
+  "InitialPrice": 3000.0,
+  "TickSize": 0.01,
+  "PipSize": 0.1,
+  "BaseSpreadPips": 0.8,
+  "MedianTickSeconds": 0.3,
+  "DailyVolatility": 0.012,
+  "GarchAlpha": 0.06,
+  "GarchBeta": 0.9,
+  "GarchLeverage": 0.04,
+  "StudentTDegreesOfFreedom": 6,
+  "TrendDriftPerDay": 0.003,
+  "RegimeMeanHours": 9.0,
+  "JumpRatePerDay": 0.04,
+  "JumpSizeDailyVolatility": 0.6,
+  "SpreadVolatilitySensitivity": 0.35,
+  "CloseWeekends": true,
+  "HourlyActivityMultipliers": [
+    0.65, 0.58, 0.55, 0.58, 0.64, 0.74,
+    0.88, 1.02, 1.18, 1.10, 1.02, 1.05,
+    1.18, 1.32, 1.40, 1.45, 1.38, 1.25,
+    1.08, 0.95, 0.88, 0.82, 0.78, 0.70
+  ]
+}
