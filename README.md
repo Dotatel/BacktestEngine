@@ -13,7 +13,6 @@ compiled `.algo` files are not supported. The included strategy is a mechanical 
 - `ValidationEngine`: spread/commission/latency stress, Monte Carlo, random windows,
   walk-forward embargoes and evidence gates.
 - `BacktestEngine/validation`: report comparison, economic-contract construction and neutral native probes.
-- `Scripts`: standalone native cTrader data-export and execution probes.
 
 ## Build and check
 
