@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-10-18",
+  "root": "repository",
+  "files": [
+    {
+      "path": "Brand/Logo/SVG/dotatel-logo-dark.svg",
+      "bytes": 1031,
+      "sha256": "7fd68bf71f1634151dde3ddc297ca332537e91802adc7fe7609377bbf9a9a2fb"
+    },
+    {
+      "path": "Brand/Logo/SVG/dotatel-logo-primary.svg",
+      "bytes": 1031,
+      "sha256": "e63f4772db7738c48be480ea784bef9ae2d6eb4dc7174da723e8062f0cda1fa7"
+    },
+    {
+      "path": "Brand/Logo/USAGE.md",
+      "bytes": 1077,
+      "sha256": "f887a88c76f8095ef25cd990fb55ebaeaafc60cb5c1077d8c769c73bf2757b71"
+    },
+    {
+      "path": "Brand/README.md",
+      "bytes": 921,
+      "sha256": "b8d395e90d2524c8d8fc612bd93cd6c801e0e3cf6bdf2b3668e6ab29f764183d"
+    },
+    {
+      "path": "Brand/brand-tokens.json",
+      "bytes": 621,
+      "sha256": "0adca936ff9439bcfe3fd68faef1b24218df4747d0e6f48ebb7ec82ea79a17a5"
+    },
+    {
+      "path": "DESIGN.md",
+      "bytes": 3801,
+      "sha256": "a2046e9d2bf156c42b7974c14a0d6d39f9ff09182d2752ff27aafee646f3205b"
+    },
+    {
+      "path": "design-context/README.md",
+      "bytes": 3313,
+      "sha256": "9d7db8e1ebf626c566751a7a32be92a1bd53b67298e6fa182ee6b57a2e303515"
+    },
+    {
+      "path": "design-context/THIRD_PARTY_NOTICES.md",
+      "bytes": 1648,
+      "sha256": "cc5e61b7868de7a8da6857f38e225ccce05d2911b8fe46cfd6aa04f41c4265c4"
+    },
+    {
+      "path": "design-context/assets/README.md",
+      "bytes": 1927,
+      "sha256": "ce1764adbd4542517ee6451238ad718b5980d46f91ced4d3af3f46b3c432d067"
+    },
+    {
+      "path": "design-context/assets/fonts/Manrope-400.ttf",
+      "bytes": 94972,
+      "sha256": "a13d9b41b0a471ce58f0e46d377fa3cc76615e4632c3b15eb397caadf7a13f0a"
+    },
+    {
+      "path": "design-context/assets/fonts/Manrope-500.ttf",
+      "bytes": 95060,
+      "sha256": "f433e5d333be1128d8ec8a28b8aadd0314d10e14e4105406076666bc830fc15d"
+    },
+    {
+      "path": "design-context/assets/fonts/Manrope-600.ttf",
+      "bytes": 95096,
+      "sha256": "6bad1a774228464cc88b8b0271555b266f7a3c64a7bedf15e165fdab4f6ac0ce"
+    },
+    {
+      "path": "design-context/assets/fonts/Manrope-700.ttf",
+      "bytes": 94928,
+      "sha256": "b9584e099e0e7f1e1e914c3037aabb9010c50346a3ce8df5eeeeecc0563044d8"
+    },
+    {
+      "path": "design-context/assets/fonts/OFL.txt",
+      "bytes": 4386,
+      "sha256": "d6a309fcfb963d329a93baf9df66fa5f3c23a4be2b5f67edf24d6cafecde12ac"
+    },
+    {
+      "path": "design-context/assets/fonts/manrope.css",
+      "bytes": 612,
+      "sha256": "7ab67344cc9a6f8695ac9f5a56c127a514a9d0e0072cca68c857a92bc4c33860"
+    },
+    {
+      "path": "design-context/assets/icons/LICENSE.txt",
+      "bytes": 3208,
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+    },
+    {
+      "path": "design-context/assets/icons/arrow-up-right.svg",
+      "bytes": 345,
+      "sha256": "482be587f746204a2d3d2f5a8b50a9815c5163563306f66eba0960421535066d"
+    },
+    {
+      "path": "design-context/assets/icons/arrow-up.svg",
+      "bytes": 340,
+      "sha256": "8dfcc45a80400884e460fa2538b67760a71c2601a279fe48ba53dee02b5265f0"
+    },
+    {
+      "path": "design-context/assets/icons/braces.svg",
+      "bytes": 457,
+      "sha256": "474283c7fdf08675fea13be0807b806ae079de3528def3736d9ffc9653491d75"
+    },
+    {
+      "path": "design-context/assets/icons/calendar-days.svg",
+      "bytes": 567,
+      "sha256": "b597723aa2196a7d79a901222816aa26e9eb6cba6d02484e18aa837d66aabf86"
+    },
+    {
+      "path": "design-context/assets/icons/chart-no-axes-combined.svg",
+      "bytes": 525,
+      "sha256": "5fbb08e02307f527653ff549997df0b99709cca936a86b2cbc46746ff974d671"
+    },
+    {
+      "path": "design-context/assets/icons/check.svg",
+      "bytes": 315,
+      "sha256": "2dd092db868003cc6a2c61320f997f744c69b2b30931cb449ee9981a4d15f163"
+    },
+    {
+      "path": "design-context/assets/icons/chevron-down.svg",
+      "bytes": 319,
+      "sha256": "9c19fc2ed7b1e409efe9be784be57d71add9a23114cc06ec38b6947abf4aa49d"
+    },
+    {
+      "path": "design-context/assets/icons/chevron-left.svg",
+      "bytes": 321,
+      "sha256": "463c58e473ce3179696d051b37f22f13ee917227526c04a994cb794bcbd2ab15"
+    },
+    {
+      "path": "design-context/assets/icons/chevron-right.svg",
+      "bytes": 321,
+      "sha256": "f2f751f120735e513fbd1f89fa9a5785832eda8dc301c442fd918582641c3f9a"
+    },
+    {
+      "path": "design-context/assets/icons/crosshair.svg",
+      "bytes": 492,
+      "sha256": "5aec7eb1e0fb57484d19dbd426ae3a9f047641ad1b14bcff4ce8ce99681af999"
+    },
+    {
+      "path": "design-context/assets/icons/database.svg",
+      "bytes": 408,
+      "sha256": "f049feb7fb8eb248abeecc78d9ca3cef9a161a7a113ff01fb1bd92114d49d11e"
+    },
+    {
+      "path": "design-context/assets/icons/download.svg",
+      "bytes": 397,
+      "sha256": "195448b5abcebcebbb2931d3b4d3079fbe26590f8b197033158c4cc4c9100a48"
+    },
+    {
+      "path": "design-context/assets/icons/file-text.svg",
+      "bytes": 524,
+      "sha256": "aa15a4da3a69c0757b771c4398ff10308121e89e2cdd571496c19374dc2f9f8a"
+    },
+    {
+      "path": "design-context/assets/icons/folder-open.svg",
+      "bytes": 483,
+      "sha256": "03e1554ce8d5f0dfefc545b176be4d8a0f49f8970e3a3082bbd10b1c7ca42c4b"
+    },
+    {
+      "path": "design-context/assets/icons/maximize.svg",
+      "bytes": 445,
+      "sha256": "abfd96f6278c4569d356848052e5abd35fc5761940b2f80d2c8594700525bc66"
+    },
+    {
+      "path": "design-context/assets/icons/minimize.svg",
+      "bytes": 445,
+      "sha256": "ce424eded5b38aa0fa85b4b5b2d380919fba29abd2568e21f6dd99523a29a373"
+    },
+    {
+      "path": "design-context/assets/icons/moon.svg",
+      "bytes": 409,
+      "sha256": "eedc1c360e361b13c9794324edb368fd2509708c59d89f99ab54ebefb847a19d"
+    },
+    {
+      "path": "design-context/assets/icons/paperclip.svg",
+      "bytes": 424,
+      "sha256": "8caf5c313eccceda36a2fe7a3596dc6b1962d83b5a1daa4b0222180f35f054c4"
+    },
+    {
+      "path": "design-context/assets/icons/play.svg",
+      "bytes": 381,
+      "sha256": "99eaf96106efd57b9ac5abfe436918ac3bf57dca430c5bb1b0941b204ae87141"
+    },
+    {
+      "path": "design-context/assets/icons/plus.svg",
+      "bytes": 331,
+      "sha256": "8abf820bdff94541a7909db589153e96786c283ad3cdda80b815413da7900a43"
+    },
+    {
+      "path": "design-context/assets/icons/puzzle.svg",
+      "bytes": 762,
+      "sha256": "809128155e3074d18c514aea286a5966f3b19e3c2917a36c8ae7dfef714c8bd6"
+    },
+    {
+      "path": "design-context/assets/icons/rotate-ccw.svg",
+      "bytes": 378,
+      "sha256": "f6d4a72298ab0d25f616003e15ec045f5b11c46572400438700520a512c858c5"
+    },
+    {
+      "path": "design-context/assets/icons/save.svg",
+      "bytes": 492,
+      "sha256": "2dfd767acf3ed6f80419e95ffeb22cf184abd0c477b41ee7bcdd865593a9d240"
+    },
+    {
+      "path": "design-context/assets/icons/search.svg",
+      "bytes": 352,
+      "sha256": "014a4a94c906b6a363be5c070d22a3323eff9b40e4caca52b97e0c098b690a85"
+    },
+    {
+      "path": "design-context/assets/icons/settings-2.svg",
+      "bytes": 405,
+      "sha256": "f40f8900eb457ec1d57033433c0a4698b8c7fd0b528f763764d6fd506dabe2ec"
+    },
+    {
+      "path": "design-context/assets/icons/sun.svg",
+      "bytes": 559,
+      "sha256": "fe4d90ff38b44347ddb01ff0e08cc71517f597e6458c6e246fb05d5a986a3ab6"
+    },
+    {
+      "path": "design-context/assets/icons/x.svg",
+      "bytes": 332,
+      "sha256": "4ab0e1e5031230da80a2ddaf9c8639bde234a974a1bc94b7dfbac7af14f55a25"
+    },
+    {
+      "path": "design-context/assets/onboarding/advanced.png",
+      "bytes": 40001,
+      "sha256": "8cab95950f5f0b79e4aaa86b06346d82162c24904f2c36b2079d8b13cb485992",
+      "width": 303,
+      "height": 169
+    },
+    {
+      "path": "design-context/assets/onboarding/claude.png",
+      "bytes": 5336,
+      "sha256": "67ba9953c0a44e3e7117664baf92dfc999f6a0e8bf4a67dd4144f7332f94fdf9",
+      "width": 51,
+      "height": 52
+    },
+    {
+      "path": "design-context/assets/onboarding/codex.png",
+      "bytes": 4410,
+      "sha256": "382de524ae11347d76537ec16acea54b2b9926333028e6afed4dd82a832b570b",
+      "width": 50,
+      "height": 50
+    },
+    {
+      "path": "design-context/assets/onboarding/dark.png",
+      "bytes": 29539,
+      "sha256": "1cb8d2d76e001c4acb01214eaf90bc207165ddbd637a87d91616a83c2a78ed0e",
+      "width": 251,
+      "height": 156
+    },
+    {
+      "path": "design-context/assets/onboarding/light.png",
+      "bytes": 26841,
+      "sha256": "bf36c0bd843ef0d19d7e26e370bc753f3fc42461598c5e8d9c4824f9ed050735",
+      "width": 241,
+      "height": 156
+    },
+    {
+      "path": "design-context/assets/onboarding/opencode.png",
+      "bytes": 2338,
+      "sha256": "ceba8ae05c3454c8d718854fcaa280f7da51cdf8f2aec23751a5b416d0026978",
+      "width": 42,
+      "height": 44
+    },
+    {
+      "path": "design-context/assets/onboarding/simple.png",
+      "bytes": 35142,
+      "sha256": "e603d33a20804d83e72332fae67f3aa6fb9f4d7c98bc0b624fc95124826f12b1",
+      "width": 302,
+      "height": 169
+    },
+    {
+      "path": "design-context/assets/onboarding/system.png",
+      "bytes": 32115,
+      "sha256": "c36e8517fa5c67c7f4f046ec14ad77f3d38e53a35d4cfc65861ca72c763f051f",
+      "width": 251,
+      "height": 156
+    },
+    {
+      "path": "design-context/assets/strategy-previews.css",
+      "bytes": 1823,
+      "sha256": "8b67a0d8354e7b16619e3fb11751c897e312c8cd7db0f2dc041a826cf91e9f07"
+    },
+    {
+      "path": "design-context/assets/strategy-previews.json",
+      "bytes": 1527,
+      "sha256": "ee31f1c0b0f280db2acff3d02c82ad17f35223f32e6036524a26fa0d731d4777"
+    },
+    {
+      "path": "design-context/flows/first-launch.mmd",
+      "bytes": 932,
+      "sha256": "8a05dc2fc0927f702910c505fcc758b5980286e6118938d7d9ec0af1c4cced45"
+    },
+    {
+      "path": "design-context/flows/project-lifecycle.mmd",
+      "bytes": 1430,
+      "sha256": "76d63cae9ae8a642eb037ea085f8914136dfa4131829f26a5efa4f57c21f2760"
+    },
+    {
+      "path": "design-context/index.html",
+      "bytes": 5547,
+      "sha256": "c1a69b1d79416bf8193b91676203553c37e24179c7c10e117b6090a7a4071102"
+    },
+    {
+      "path": "design-context/prompts/implement-screen.md",
+      "bytes": 793,
+      "sha256": "ec7cf90bec273f2ed5da0f0fcc01545bac1ca59445a493d894a7167066831e0c"
+    },
+    {
+      "path": "design-context/prompts/review-design.md",
+      "bytes": 658,
+      "sha256": "843afb879ea2d36454e962c20a61334753574e0dc30fef6c4c9caf7c7ae99ace"
+    },
+    {
+      "path": "design-context/provenance/figma.json",
+      "bytes": 1390,
+      "sha256": "b696efae67b7cfcee6fcfc69169ffc99a131c72c493629abb9b35b12a600ea97"
+    },
+    {
+      "path": "design-context/screens/backtest/concept-dark.png",
+      "bytes": 1702590,
+      "sha256": "718412ec8033874b67b5accd9ffdcabc397a970fc1f7b1795aae929e7eb44da7",
+      "width": 1630,
+      "height": 965
+    },
+    {
+      "path": "design-context/screens/backtest/concept-light.png",
+      "bytes": 1515645,
+      "sha256": "a8d47a798062670400e5b42bcefe43790d575c48d15cd183567cbfe4f6ca989b",
+      "width": 1630,
+      "height": 965
+    },
+    {
+      "path": "design-context/screens/backtest/dark.png",
+      "bytes": 169391,
+      "sha256": "a946cc8da792bdd70c01a604593a039157c1f7f9d7ba7fc4acc5e30259c1e8fb",
+      "width": 1600,
+      "height": 960
+    },
+    {
+      "path": "design-context/screens/backtest/light.png",
+      "bytes": 169651,
+      "sha256": "22f1f195f6897951f3d377a6c8ea90aa9552e072bc91fc98be08c0500cbf111a",
+      "width": 1600,
+      "height": 960
+    },
+    {
+      "path": "design-context/screens/onboarding/P01.png",
+      "bytes": 1074389,
+      "sha256": "3a69e761186fc5d44817358a4d795553ed40a67e9cc1ca79d30ca89b7525ead0",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/P01.svg",
+      "bytes": 82650,
+      "sha256": "5e21f1d0f2f1b179cad5811da7930808ecee97a176268157d1d83a549ffa2b60"
+    },
+    {
+      "path": "design-context/screens/onboarding/P02.png",
+      "bytes": 985427,
+      "sha256": "7eba8ff2600dd15567ec71875ab41fb44de70fc6329eca3930dc60182342e785",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/P02.svg",
+      "bytes": 238930,
+      "sha256": "922bf13ef01234ac850ebf45ae1dd148323ea5dcaf4e4c677a25200e31ce3d1c"
+    },
+    {
+      "path": "design-context/screens/onboarding/P03.svg",
+      "bytes": 258649,
+      "sha256": "d456ba445f7c80803bc7084a1052f68c436041cae3d29ff1e674873998004622"
+    },
+    {
+      "path": "design-context/screens/onboarding/P04.svg",
+      "bytes": 178454,
+      "sha256": "40c14da24d2a17c9da8de731169091728dea2d830b6383469e349bc8aa2ac47a"
+    },
+    {
+      "path": "design-context/screens/onboarding/P05.png",
+      "bytes": 1162478,
+      "sha256": "1c60dfb31d40552388af69f91fa17def2a0dfef662e4681f9fffa18ed36e5da9",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/P05.svg",
+      "bytes": 134686,
+      "sha256": "2cd04c56dd588f0d419e9d217082871b221a462609c40de315fa37d5c565949e"
+    },
+    {
+      "path": "design-context/screens/onboarding/concept-P01-welcome-window.png",
+      "bytes": 1467514,
+      "sha256": "b7024d32f19712787bc144507601e378bba594a054c5a4ac7fc4382d37896817",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/concept-P02-workspace-style.png",
+      "bytes": 1407726,
+      "sha256": "daed3fe0824868661d03c0eec2aff34e5c58bca9c768772683c5f65bdc7a6aa7",
+      "width": 1671,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/concept-P03-appearance.png",
+      "bytes": 1420344,
+      "sha256": "c909061b436ccf70278610eccd723d5d6d623abda0965d1e1e894f32e926014c",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/concept-P04-ai-agent.png",
+      "bytes": 1442410,
+      "sha256": "dbeaf2fab1ece7e198358fa29099aa385cd55fb6d5ac4f16256a3e2f08da66e5",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/onboarding/concept-P05-finish.png",
+      "bytes": 1757377,
+      "sha256": "d3efcf0e6d27a97abe6a951bf8bed008f7183ee7686add472baa3a76d3488854",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "path": "design-context/screens/project-launcher/breakout.png",
+      "bytes": 795283,
+      "sha256": "c04118a582c7f053aa8974fd985733a879dbf84cddde3af46f735c3e1343e7b3",
+      "width": 1617,
+      "height": 973
+    },
+    {
+      "path": "design-context/screens/project-launcher/concept-hover.png",
+      "bytes": 1483160,
+      "sha256": "f7e7e425bec974f52ada736347d6822c70bde9ae390bc966f4e47896a4d63318",
+      "width": 1616,
+      "height": 973
+    },
+    {
+      "path": "design-context/screens/project-launcher/default.png",
+      "bytes": 794350,
+      "sha256": "2d070196e8885c1907fc7bf2f0bdfb406cae52d798e87033d69081829fd27138",
+      "width": 1617,
+      "height": 973
+    },
+    {
+      "path": "design-context/screens/project-launcher/ema.png",
+      "bytes": 795718,
+      "sha256": "2142032a9fe3b6574f01d03bcbe1e4c7c68302865b865eba76fc4c8bc86e92ef",
+      "width": 1617,
+      "height": 973
+    },
+    {
+      "path": "design-context/screens/project-launcher/mean.png",
+      "bytes": 795610,
+      "sha256": "a3b1528084bf20c17da308eaf4843c770a377a66b73e4baf73eb0c6be762e090",
+      "width": 1617,
+      "height": 973
+    },
+    {
+      "path": "design-context/screens/project-launcher/rsi.png",
+      "bytes": 795453,
+      "sha256": "c2474efd5b09e479d4600535054f6ea0bb2cb1adddbc305d2a9541b908d77a1c",
+      "width": 1617,
+      "height": 973
+    },
+    {
+      "path": "design-context/scripts/validate.py",
+      "bytes": 4107,
+      "sha256": "1dc7f4367f57b8c116282eca0dfd058dda1ad36d6d0f64b655c669659bdcccb5"
+    },
+    {
+      "path": "design-context/source/figma/01-foundations-starter.js",
+      "bytes": 9727,
+      "sha256": "25f06ea12b2927d807369d622a44ad6462e9beb223221e57c5d0b74b890b8c10"
+    },
+    {
+      "path": "design-context/source/figma/02-components.js",
+      "bytes": 31602,
+      "sha256": "fb54fed24ce9c5a7ce4769e8e1f4c115f6ddd7777a85291a26ef4c2ac6bd93c2"
+    },
+    {
+      "path": "design-context/source/figma/03-workspace-components.js",
+      "bytes": 22626,
+      "sha256": "41a409d181ae03be077ff49f36b04ac216b8b776ecb3720b9c82ad95babdf85f"
+    },
+    {
+      "path": "design-context/source/figma/04-compose-dark.js",
+      "bytes": 7753,
+      "sha256": "1075a60474c083f96de22beea6c8c456d733e0365914ba3887dba661ed7cb539"
+    },
+    {
+      "path": "design-context/source/figma/04-compose-light.js",
+      "bytes": 7756,
+      "sha256": "3c8324a46d19333f68bc94e3026e5ebf87724dd77218df179b1a0b7476bf4748"
+    },
+    {
+      "path": "design-context/source/figma/05-fix-component-icons.js",
+      "bytes": 1125,
+      "sha256": "f98177827903edb422b478cd4788c099b18d87fce456cfc8d481e502f6a2d3d2"
+    },
+    {
+      "path": "design-context/source/figma/06-fix-screen-icons.js",
+      "bytes": 667,
+      "sha256": "7dd4514482eaa157eba26fb98dd7da87f80e9ba125efacc0e314ff69ef42b6a1"
+    },
+    {
+      "path": "design-context/source/figma/onboarding-background.js",
+      "bytes": 1277,
+      "sha256": "b5d1290e6b7ea72dfb6d0dd51a2b2e66b0111e9749d2edd549e6e7b7f9a7f80a"
+    },
+    {
+      "path": "design-context/source/figma/onboarding-build.js",
+      "bytes": 12771,
+      "sha256": "5d6225b740c6db9a705d6fae97b6ba52875826c86cfae6b251500f8bdc4e2422"
+    },
+    {
+      "path": "design-context/specs/backtest.md",
+      "bytes": 3285,
+      "sha256": "1626f6e5382f577c79562cc696eba9c93ce3775f123a56119737f56dafca312b"
+    },
+    {
+      "path": "design-context/specs/components.md",
+      "bytes": 2851,
+      "sha256": "9344adfa34ce220dfd1d8ea58a601d777fb2df8c36dc23b94ba4d972b1bffff4"
+    },
+    {
+      "path": "design-context/specs/figma-component-inventory.json",
+      "bytes": 3071,
+      "sha256": "5b4ed73f7de5e81130df88642fc5742af9cd2148255f5b3dc1b15d535c0a92dc"
+    },
+    {
+      "path": "design-context/specs/interactions.json",
+      "bytes": 2351,
+      "sha256": "73ef817f7f647bfb8ba60cd5923ece7fdc2a414fc85c3e0340e18e9531800a0d"
+    },
+    {
+      "path": "design-context/specs/navigation.md",
+      "bytes": 2859,
+      "sha256": "cd0917ae36d4c9edcca6856f4c2b1daf30b816189158cfc0e885cc28ecbfd521"
+    },
+    {
+      "path": "design-context/specs/onboarding.md",
+      "bytes": 3076,
+      "sha256": "76e6b1842fcb92ffa092a4de8e71e85af8879ea3bcfc3c619a26ea284868cbe4"
+    },
+    {
+      "path": "design-context/specs/project-launcher.md",
+      "bytes": 3406,
+      "sha256": "1c9f1c06ce0dddd0952f47a0ac0df8bce903163732e1497d33247a9ed2ca008e"
+    },
+    {
+      "path": "design-context/tokens/layout.json",
+      "bytes": 1108,
+      "sha256": "f461f6ee5b2938007e6187fa201160170a6b1d752cd4a42fe282ba9a7b844cf4"
+    },
+    {
+      "path": "design-context/tokens/semantic.json",
+      "bytes": 1237,
+      "sha256": "0197d5c025853d2464150c70ae83f75eff391a6b053d9a98f34153264f6fb719"
+    },
+    {
+      "path": "design-context/tokens/tokens.css",
+      "bytes": 1256,
+      "sha256": "a8645db8dd1ab0439831b85f500256977bf97f0af8adf00438d844c0486e8b16"
+    },
+    {
+      "path": "design-context/tokens/typography.json",
+      "bytes": 893,
+      "sha256": "2d430fe5a2bcda14269c934827f3747f88fa0fcb6f830ee1208d9afaf5c6679e"
+    }
+  ]
+}

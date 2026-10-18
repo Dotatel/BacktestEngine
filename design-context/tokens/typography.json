@@ -1,0 +1,72 @@
+{
+  "family": "Manrope",
+  "weights": [
+    400,
+    500,
+    600,
+    700
+  ],
+  "fallback": "Arial, sans-serif",
+  "editorialBrandFamily": "Source Serif 4",
+  "editorialFontBundled": false,
+  "editorialFontRequiredForCurrentScreens": false,
+  "compactStyles": {
+    "caption": [
+      11,
+      16,
+      400
+    ],
+    "body": [
+      12,
+      18,
+      400
+    ],
+    "control": [
+      13,
+      20,
+      500
+    ],
+    "text": [
+      14,
+      22,
+      400
+    ],
+    "title": [
+      16,
+      24,
+      600
+    ],
+    "button": [
+      13,
+      20,
+      600
+    ]
+  },
+  "launcher": {
+    "heading": [
+      32,
+      42,
+      700
+    ],
+    "description": [
+      18,
+      28,
+      400
+    ],
+    "button": [
+      18,
+      26,
+      600
+    ],
+    "exampleTitle": [
+      18,
+      26,
+      600
+    ],
+    "exampleDescription": [
+      15,
+      24,
+      400
+    ]
+  }
+}

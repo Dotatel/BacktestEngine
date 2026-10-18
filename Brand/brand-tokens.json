@@ -1,0 +1,26 @@
+{
+  "brand": "Dotatel",
+  "slogan": "Big things have small beginnings.",
+  "colors": {
+    "phosphor": "#C7FF1A",
+    "ink": "#080D0A",
+    "forest": "#102417",
+    "paper": "#F4F6EE",
+    "steel": "#5E6961",
+    "mist": "#DDE2D8",
+    "grid": "#294432",
+    "positive": "#22C55E",
+    "warning": "#F6B73C",
+    "negative": "#F05A67"
+  },
+  "type": {
+    "primary": "Manrope",
+    "editorial": "Source Serif 4",
+    "fallback": "Arial, sans-serif"
+  },
+  "logo": {
+    "clearspace": "1x equals 17% of logo height, matching the wordmark stroke thickness",
+    "minimum_horizontal_px": 120,
+    "minimum_mark_px": 20
+  }
+}

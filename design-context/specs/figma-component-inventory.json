@@ -1,0 +1,120 @@
+{
+  "icons": {
+    "folder-open": "4:2",
+    "chart-no-axes-combined": "4:5",
+    "database": "4:13",
+    "braces": "4:18",
+    "puzzle": "4:22",
+    "settings-2": "4:25",
+    "chevron-down": "4:31",
+    "chevron-left": "4:34",
+    "chevron-right": "4:37",
+    "plus": "4:40",
+    "save": "4:44",
+    "play": "4:49",
+    "sun": "4:52",
+    "moon": "4:63",
+    "maximize": "4:66",
+    "minimize": "4:72",
+    "x": "4:78",
+    "paperclip": "4:82",
+    "arrow-up": "4:85",
+    "download": "4:89",
+    "crosshair": "4:94",
+    "search": "4:101",
+    "rotate-ccw": "4:105",
+    "calendar-days": "4:109",
+    "arrow-up-right": "4:121",
+    "file-text": "4:125",
+    "check": "4:132"
+  },
+  "sets": {
+    "Button": "4:151",
+    "Input": "4:236",
+    "Select": "4:248",
+    "Navigation item": "4:263",
+    "Tab": "4:275",
+    "Trade row": "4:283"
+  },
+  "variantIds": {
+    "Button": {
+      "Variant=default, State=Default": "4:135",
+      "Variant=default, State=Hover": "4:136",
+      "Variant=default, State=Focus": "4:137",
+      "Variant=default, State=Disabled": "4:138",
+      "Variant=outline, State=Default": "4:139",
+      "Variant=outline, State=Hover": "4:140",
+      "Variant=outline, State=Focus": "4:141",
+      "Variant=outline, State=Disabled": "4:142",
+      "Variant=ghost, State=Default": "4:143",
+      "Variant=ghost, State=Hover": "4:144",
+      "Variant=ghost, State=Focus": "4:145",
+      "Variant=ghost, State=Disabled": "4:146",
+      "Variant=link, State=Default": "4:147",
+      "Variant=link, State=Hover": "4:148",
+      "Variant=link, State=Focus": "4:149",
+      "Variant=link, State=Disabled": "4:150"
+    },
+    "Input": {
+      "State=Default": "4:232",
+      "State=Focus": "4:233",
+      "State=Invalid": "4:234",
+      "State=Disabled": "4:235"
+    },
+    "Select": {
+      "State=Default": "4:245",
+      "State=Focus": "4:246",
+      "State=Disabled": "4:247"
+    },
+    "Navigation item": {
+      "Selected=False": "4:261",
+      "Selected=True": "4:262"
+    },
+    "Tab": {
+      "Active=False": "4:273",
+      "Active=True": "4:274"
+    },
+    "Trade row": {
+      "Side=Buy, Result=Win": "4:279",
+      "Side=Buy, Result=Loss": "4:280",
+      "Side=Sell, Result=Win": "4:281",
+      "Side=Sell, Result=Loss": "4:282"
+    }
+  },
+  "props": {
+    "Button": {
+      "Label": "Label#4:0",
+      "Icon": "Icon#4:17",
+      "ShowIcon": "Show icon#4:34"
+    },
+    "Input": {
+      "Value": "Value#4:51",
+      "Unit": "Unit#4:56"
+    },
+    "Select": {
+      "Value": "Value#4:61"
+    },
+    "Nav": {
+      "Label": "Label#4:65",
+      "Icon": "Icon#4:68"
+    },
+    "Tab": {
+      "Label": "Label#4:71"
+    },
+    "Row": {
+      "Number": "Number#4:74",
+      "Entry": "Entry#4:79",
+      "Exit": "Exit#4:84",
+      "Side label": "Side label#4:89",
+      "Entry price": "Entry price#4:94",
+      "Exit price": "Exit price#4:99",
+      "Lots": "Lots#4:104",
+      "Net PnL": "Net PnL#4:109",
+      "Result label": "Result label#4:114"
+    }
+  },
+  "slider": "4:320",
+  "logo": "4:325",
+  "componentCount": 60,
+  "localAdaptations": true
+}

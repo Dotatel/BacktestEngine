@@ -1,0 +1,16 @@
+/* Exact preview artwork from included Figma state PNGs, no external dependencies. */
+.strategy-preview { position:relative; display:block; width:200px; height:114px; overflow:hidden; border-radius:6px; }
+.strategy-preview::before, .strategy-preview::after { content:""; position:absolute; inset:0; background-repeat:no-repeat; background-size:1617px 973px; transition:opacity 150ms ease; }
+.strategy-preview::before { background-image:url("../screens/project-launcher/default.png"); }
+.strategy-preview::after { opacity:0; }
+.example:where(:hover,:focus-visible) .strategy-preview::after { opacity:1; }
+.example:focus-visible { outline:2px solid #C7FF1A; outline-offset:6px; border-radius:6px; }
+.strategy-preview[data-strategy="ema"]::before, .strategy-preview[data-strategy="ema"]::after { background-position:-364.5px -594px; }
+.strategy-preview[data-strategy="ema"]::after { background-image:url("../screens/project-launcher/ema.png"); }
+.strategy-preview[data-strategy="breakout"]::before, .strategy-preview[data-strategy="breakout"]::after { background-position:-621.5px -594px; }
+.strategy-preview[data-strategy="breakout"]::after { background-image:url("../screens/project-launcher/breakout.png"); }
+.strategy-preview[data-strategy="mean"]::before, .strategy-preview[data-strategy="mean"]::after { background-position:-878.5px -594px; }
+.strategy-preview[data-strategy="mean"]::after { background-image:url("../screens/project-launcher/mean.png"); }
+.strategy-preview[data-strategy="rsi"]::before, .strategy-preview[data-strategy="rsi"]::after { background-position:-1135.5px -594px; }
+.strategy-preview[data-strategy="rsi"]::after { background-image:url("../screens/project-launcher/rsi.png"); }
+@media (prefers-reduced-motion: reduce) { .strategy-preview::before, .strategy-preview::after { transition:none; } }

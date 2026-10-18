@@ -1,0 +1,41 @@
+{
+  "file": "https://www.figma.com/design/z54bMavOek7FfvyjloWBCg",
+  "fileKey": "z54bMavOek7FfvyjloWBCg",
+  "packagedAt": "2026-10-18",
+  "pages": {
+    "Backtest": "0:1",
+    "Components": "3:2",
+    "Onboarding": "49:7445"
+  },
+  "backtest": {
+    "dark": "3:93",
+    "light": "3:94"
+  },
+  "onboarding": {
+    "P01 · Welcome": "54:2197",
+    "P02 · Workspace style": "54:2679",
+    "P03 · Appearance": "54:2900",
+    "P04 · Connect AI agent": "54:3130",
+    "P05 · Finish": "54:3361"
+  },
+  "launcher": {
+    "componentSet": "70:67",
+    "default": "63:7875",
+    "variants": [
+      "Default",
+      "EMA",
+      "Breakout",
+      "Mean",
+      "RSI"
+    ],
+    "prototype": "Incomplete. State variants exist; hover target links were not finished before user stopped the work."
+  },
+  "exportCoverage": {
+    "onboardingSVG": "P01–P05 direct Figma exports",
+    "onboardingPNG": "P01, P02, P05 native Figma; concept PNG references for all five",
+    "launcherPNG": "All five native Figma state exports",
+    "backtestPNG": "Previously verified native previews in dark and light",
+    "remainingSVG": "Backtest and launcher SVG exports were not captured; authored Figma construction scripts are included as source context."
+  },
+  "figmaAudit": "Prior backtest/onboarding native layer audits are recorded locally; this package does not repeat a complete live structural audit."
+}

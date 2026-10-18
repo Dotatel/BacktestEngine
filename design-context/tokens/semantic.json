@@ -1,0 +1,47 @@
+{
+  "source": "Existing Figma foundation authored values; named brand primitives remain in Brand/brand-tokens.json",
+  "themes": {
+    "light": {
+      "app": "#F4F6EE",
+      "panel": "#FFFFFF",
+      "sidebar": "#F0F4EB",
+      "input": "#FFFFFF",
+      "foreground": "#080D0A",
+      "muted": "#5E6961",
+      "border": "#DDE2D8",
+      "grid": "#E8EDE4",
+      "primary": "#C7FF1A",
+      "onPrimary": "#080D0A",
+      "positive": "#087D47",
+      "negative": "#C33B47",
+      "link": "#245F98",
+      "selected": "#E7EFDC",
+      "selectedText": "#102417",
+      "hover": "#EDF3E8",
+      "volumeUp": "#A3D7BD",
+      "volumeDown": "#E9A7AD",
+      "warning": "#F6B73C"
+    },
+    "dark": {
+      "app": "#080D0A",
+      "panel": "#0C1811",
+      "sidebar": "#102417",
+      "input": "#0D1D14",
+      "foreground": "#F4F6EE",
+      "muted": "#A4B5A9",
+      "border": "#294432",
+      "grid": "#182E21",
+      "primary": "#C7FF1A",
+      "onPrimary": "#080D0A",
+      "positive": "#00D5AA",
+      "negative": "#F05A67",
+      "link": "#8DCDFF",
+      "selected": "#193322",
+      "selectedText": "#C7FF1A",
+      "hover": "#18301F",
+      "volumeUp": "#1C7D61",
+      "volumeDown": "#833C43",
+      "warning": "#F6B73C"
+    }
+  }
+}

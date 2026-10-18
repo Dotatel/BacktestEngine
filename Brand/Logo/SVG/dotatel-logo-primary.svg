@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 635 100" role="img" aria-labelledby="title desc">
+<title id="title">Dotatel logo</title>
+<desc id="desc">Custom split D followed by the geometric Dotatel wordmark.</desc>
+
+<g aria-label="Custom split D mark">
+  <path fill="#080D0A" d="M0 5H49C72 5 90 17 100 33L23 79C8 72 0 61 0 46Z"/>
+  <path fill="#C7FF1A" d="M28 82L99 40C102 47 103 54 103 61V95H28Z"/>
+</g>
+<g transform="translate(28 0)" fill="#080D0A" aria-label="OTATEL">
+  <path fill-rule="evenodd" d="M124 14H174C192 14 203 27 203 45V55C203 73 192 86 174 86H124C106 86 95 73 95 55V45C95 27 106 14 124 14ZM128 30C117 30 112 36 112 46V54C112 64 117 70 128 70H170C181 70 186 64 186 54V46C186 36 181 30 170 30Z"/>
+  <path d="M211 14H286V31H257V86H240V31H211Z"/>
+  <path fill-rule="evenodd" d="M323 14H343L379 86H359L352 71H314L307 86H287ZM322 55H344L333 31Z"/>
+  <path d="M377 14H452V31H423V86H406V31H377Z"/>
+  <path d="M462 14H527V30H479V42H520V58H479V70H527V86H462Z"/>
+  <path d="M541 14H558V70H607V86H541Z"/>
+</g>
+</svg>

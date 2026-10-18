@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "status": "Intended implementation contract; not a claim of wired Figma interactions or working product integration",
+  "onboarding": {
+    "order": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05"
+    ],
+    "welcome": "compact native window",
+    "getStarted": "expand setup window, advance to P02",
+    "layoutChoices": [
+      "simple",
+      "advanced"
+    ],
+    "appearanceChoices": [
+      "system",
+      "light",
+      "dark"
+    ],
+    "agents": [
+      "codex",
+      "claude-code",
+      "opencode"
+    ],
+    "agentOptional": true,
+    "agentStates": [
+      "not-connected",
+      "connecting",
+      "connected",
+      "failed",
+      "canceled",
+      "skipped"
+    ],
+    "finish": "persist actual configuration, mark setup complete, open launcher",
+    "back": "preserve selections",
+    "close": "resume saved progress"
+  },
+  "launcher": {
+    "columns": [
+      0.5,
+      0.5
+    ],
+    "exampleCount": 4,
+    "examples": [
+      "ema",
+      "breakout",
+      "mean",
+      "rsi"
+    ],
+    "default": "all previews gray",
+    "hover": "only targeted preview full color",
+    "focus": "targeted preview full color plus outline",
+    "pointerExit": "restore gray unless keyboard focus remains",
+    "durationMs": 150,
+    "reducedMotion": "disable transition",
+    "exampleClick": "create dialog with chosen template",
+    "recentClick": "validate and open project",
+    "missingRecent": [
+      "locate",
+      "retry",
+      "remove-from-recents-without-deleting-project"
+    ],
+    "figmaPrototype": "incomplete"
+  },
+  "backtest": {
+    "draftSeparateFromSavedRun": true,
+    "dateTimezone": "UTC",
+    "dateRange": "two handles synchronized with exact fields; validate coverage and order",
+    "markers": {
+      "entry": "green up triangle",
+      "exitOrSell": "red down triangle",
+      "circles": false,
+      "onSelect": "show real execution details and linked trade row"
+    },
+    "resultsStates": [
+      "empty",
+      "validating",
+      "queued",
+      "running",
+      "complete",
+      "canceled",
+      "interrupted",
+      "failed"
+    ],
+    "draftEdit": "mark results as prior saved run",
+    "assistantExpandRestore": "retain draft, conversation, selected run and scroll",
+    "suggestion": "prepare a request; do not automatically execute engine actions"
+  }
+}
