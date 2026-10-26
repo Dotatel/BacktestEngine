@@ -1,0 +1,72 @@
+:root {
+  --motion-feedback: 120ms;
+  --motion-step: 200ms;
+  --motion-complete: 280ms;
+  --ease-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+}
+.setup-pane {
+  --step-offset: 10px;
+  animation: step-arrive var(--motion-step) var(--ease-arrive);
+}
+.setup-pane[data-direction="back"] {
+  --step-offset: -10px;
+}
+[data-slot="button"] {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-feedback);
+}
+[data-slot="radio-group-indicator"] {
+  animation: selection-confirm var(--motion-feedback) var(--ease-arrive);
+}
+.finish-icon path {
+  stroke-dasharray: 32;
+  animation: check-resolve var(--motion-complete) var(--ease-arrive);
+}
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+@keyframes step-arrive {
+  from {
+    opacity: 0.55;
+    transform: translateX(var(--step-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes selection-confirm {
+  from {
+    transform: scale(0.65);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes check-resolve {
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .setup-pane,
+  [data-slot="radio-group-indicator"],
+  .finish-icon path,
+  .spinner,
+  [data-slot="tooltip-content"],
+  [data-slot="dialog-content"],
+  [data-slot="dialog-overlay"] {
+    animation: none;
+  }
+  [data-slot="button"] {
+    transition-duration: 80ms;
+  }
+}

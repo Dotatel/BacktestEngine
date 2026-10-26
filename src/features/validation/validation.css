@@ -1,0 +1,110 @@
+.validation-stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  overflow: auto;
+  padding: var(--space-4);
+  font-size: var(--type-body);
+}
+.validation-stage__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.validation-stage h2 {
+  margin: 0;
+  font-size: var(--type-lead);
+  font-weight: 650;
+}
+.validation-stage h3,
+.validation-stage h4 {
+  margin: 0;
+  font-size: var(--type-body);
+  font-weight: 650;
+}
+.validation-stage p {
+  margin: 0;
+  max-width: 75ch;
+  line-height: 1.6;
+}
+.validation-stage__muted {
+  color: var(--muted-foreground);
+}
+.validation-stage__error {
+  color: var(--destructive);
+}
+.validation-stage__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-4);
+}
+.validation-stage__evidence {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+.validation-stage__evidence dt {
+  color: var(--muted-foreground);
+}
+.validation-stage__evidence dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.validation-stage__hash {
+  font-family: monospace;
+  font-size: var(--type-small);
+}
+.validation-stage__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  max-width: 980px;
+}
+.validation-stage__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.validation-stage__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.full-validation-actions {
+  margin-top: var(--space-4);
+}
+.validation-stage__path,
+.validation-stage__output {
+  overflow-wrap: anywhere;
+}
+.validation-stage__output {
+  white-space: pre-wrap;
+  font-size: var(--type-small);
+  max-height: 240px;
+  overflow: auto;
+}
+.validation-stage ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+}
+.validation-stage details summary {
+  cursor: pointer;
+}
+@media (max-width: 640px) {
+  .validation-stage__evidence {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+  .validation-stage__evidence dd {
+    margin-bottom: var(--space-2);
+  }
+  .validation-stage__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+# Retain imported source/reference bytes for the recorded integrity manifests.
+engines/** -text
+docs/design-context/** -text
+docs/Brand/** -text
+.agents/skills/impeccable/** -text

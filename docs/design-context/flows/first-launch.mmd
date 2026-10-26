@@ -1,0 +1,21 @@
+flowchart TD
+    Launch[Open BacktestEngine] --> Configured{Setup completed?}
+    Configured -->|No| Welcome[P01 Compact Welcome window]
+    Welcome -->|Get Started: expand window| Style[P02 Simple or Advanced]
+    Style --> Appearance[P03 System, Light or Dark]
+    Appearance --> Agent[P04 Bring your AI agent]
+    Agent -->|Connect| Connecting{Connection outcome}
+    Connecting -->|Success| Finish[P05 Review actual configuration]
+    Connecting -->|Failed or canceled| Agent
+    Agent -->|Skip for now| Finish
+    Finish -->|Back| Agent
+    Agent -->|Back| Appearance
+    Appearance -->|Back| Style
+    Style -->|Back| Welcome
+    Finish -->|Open BacktestEngine: save completion| Launcher[Project launcher]
+    Configured -->|Yes| Launcher
+    Configured -->|Interrupted setup| Resume{Last saved step}
+    Resume -->|Layout| Style
+    Resume -->|Appearance| Appearance
+    Resume -->|Agent| Agent
+    Resume -->|Finish| Finish

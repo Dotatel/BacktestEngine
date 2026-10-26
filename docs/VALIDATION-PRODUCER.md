@@ -1,0 +1,11 @@
+# Frozen validation producer
+
+`validation_package.rs` freezes the original 27 `ValidationEngine/**/*.py` files into a new job-owned outer package directory. Their expected hashes come from the compile-time retained-source capture. Extra files, missing files, bytecode, changed source, links and unavailable metadata fail before execution. The sibling staged `validation/host` directory is an application asset and is outside that producer inventory.
+
+The caller passes the returned `root` to the existing Python bootstrap and the returned `python` to the managed process host. Keep the entire `FrozenValidationPackage` object until owned process exit is confirmed. Cleanup-unconfirmed state must retain it along with the baseline authority locks. The source copies and their provenance file stay locked against Windows writes/deletion during the job.
+
+The existing embedded CPython 3.14.9 runtime remains in the installation. All 37 files and its staging manifest are hashed and locked. The complete runtime digest must match the pinned official archive's established tree identity. This avoids a 24 MB runtime copy for each job. The fixed file order reproduces the existing PowerShell staging digest without depending on the current machine's sort culture. Updating the supported runtime requires updating the pinned version, archive/tree identities and inventory together, then rerunning staging and actual interpreter tests. A developer PATH interpreter does not establish this pinned-runtime contract.
+
+Provenance records exact producer/runtime file hashes, the output-adapter source hash and the staging-manifest hash. It contains logical relative names, without private absolute paths. The runtime and source identities are complete within those inventories; a separately recorded SDK executable hash does not attest every SDK file. Local hashes do not protect against an attacker who can replace the application itself and every trust anchor.
+
+Source formatting checks pass. Six new checks are supplied, including an actual pinned-interpreter import from frozen source under retained locks, owned write/rename exclusion, producer/runtime tampering, path/destination preservation and bounded empty-directory enumeration. Coordinated Cargo execution and production consumer integration remain pending. These checks do not establish trading or cTrader parity.

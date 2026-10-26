@@ -1,0 +1,74 @@
+{
+  "unit": "px",
+  "source": "Existing Figma frame dimensions; responsive behavior remains a specification",
+  "space": [
+    2,
+    4,
+    6,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32
+  ],
+  "radius": [
+    4,
+    6,
+    8,
+    12
+  ],
+  "icons": {
+    "navigation": 18,
+    "toolbar": 16,
+    "launcher": 19
+  },
+  "backtest": {
+    "frame": [
+      1600,
+      960
+    ],
+    "header": 64,
+    "footer": 24,
+    "rail": 72,
+    "strategyPanel": 252,
+    "center": 888,
+    "assistant": 348,
+    "gap": 8
+  },
+  "onboarding": {
+    "referenceFrame": [
+      1672,
+      941
+    ],
+    "welcomeWindow": [
+      660,
+      470
+    ],
+    "optionLayout": "preview, label, description, radio"
+  },
+  "launcher": {
+    "frame": [
+      1617,
+      973
+    ],
+    "contentLeft": 336,
+    "contentRight": 1364,
+    "contentWidth": 1028,
+    "topColumns": [
+      514,
+      514
+    ],
+    "dividerX": 850,
+    "dividerHeight": 322,
+    "columnInnerGap": 48,
+    "examples": 4,
+    "exampleCellWidth": 257,
+    "previewSize": [
+      200,
+      114
+    ],
+    "previewTop": 594,
+    "titlesBelow": true
+  }
+}

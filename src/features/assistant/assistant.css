@@ -1,0 +1,66 @@
+.assistant-panel {
+  height: 100%;
+  overflow: auto;
+  padding: 1rem;
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+.assistant-header,
+.assistant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.assistant-header {
+  justify-content: space-between;
+}
+.assistant-panel h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.assistant-panel h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.assistant-panel p {
+  margin-block: 0.5rem;
+}
+.assistant-muted {
+  color: var(--muted-foreground);
+  max-width: 75ch;
+}
+.assistant-error {
+  color: var(--destructive);
+  overflow-wrap: anywhere;
+}
+.assistant-field {
+  display: grid;
+  gap: 0.375rem;
+  margin-block: 0.875rem;
+  min-width: 0;
+}
+.assistant-section,
+.assistant-message {
+  border-top: 1px solid var(--border);
+  padding-top: 0.875rem;
+  margin-top: 1rem;
+}
+.assistant-context {
+  margin-block: 1rem;
+}
+.assistant-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.assistant-preview {
+  background: var(--muted);
+  padding: 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 20rem;
+  overflow: auto;
+}
+.assistant-panel [data-slot="select-trigger"][data-placeholder] {
+  color: var(--foreground);
+}

@@ -1,0 +1,47 @@
+{
+  "strategy": "DiagnosticOneTrade",
+  "symbol": "XAUUSD",
+  "timeframe": "Minute",
+  "period": "m1",
+  "account": {
+    "starting_capital": 10000,
+    "balance": 10000.95,
+    "equity": 10000.95
+  },
+  "drawdown": {
+    "max_balance_drawdown": 0,
+    "max_balance_drawdown_percent": 0,
+    "max_equity_drawdown": 0,
+    "max_equity_drawdown_percent": 0
+  },
+  "trade_statistics": {
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "long_trades": 1,
+    "short_trades": 0,
+    "gross_profit": 0.95,
+    "gross_loss": 0,
+    "net_profit": 0.95,
+    "profit_factor": null,
+    "total_pips": 9.5
+  },
+  "trades": [
+    {
+      "id": 1,
+      "symbol": "XAUUSD",
+      "label": "SMOKE",
+      "side": "Buy",
+      "volume_in_units": 1,
+      "entry_time_utc": "2026-06-25T00:00:00Z",
+      "entry_price": 100.05,
+      "close_time_utc": "2026-06-25T00:15:00Z",
+      "close_price": 101,
+      "close_reason": "manual",
+      "pips": 9.5,
+      "gross_profit": 0.95,
+      "commissions": 0,
+      "net_profit": 0.95
+    }
+  ]
+}

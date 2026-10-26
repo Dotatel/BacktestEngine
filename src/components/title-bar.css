@@ -1,0 +1,48 @@
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 var(--titlebar-height);
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  user-select: none;
+  z-index: 20;
+}
+.titlebar-drag {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-4);
+  align-self: stretch;
+  min-width: 0;
+  padding-left: var(--space-2);
+}
+.titlebar-brand img {
+  width: 112px;
+}
+.titlebar-product {
+  color: var(--muted-foreground);
+  font-size: var(--type-small);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--border);
+}
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.window-control {
+  color: var(--muted-foreground);
+}
+.window-control:hover {
+  color: var(--foreground);
+}
+.window-close:hover {
+  color: var(--destructive);
+  background: var(--destructive-surface);
+}
+@media (max-width: 749px) {
+  .titlebar-product {
+    display: none;
+  }
+}

@@ -1,0 +1,187 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/motion.css";
+@import "./features/onboarding/onboarding.css";
+
+@custom-variant dark (&:is(.dark *));
+@font-face {
+  font-family: Manrope;
+  src: url("/assets/fonts/Manrope-Variable.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  --font-sans: Manrope, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--secondary);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--control-border);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  font-family: Manrope, sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --background: #f4f6ee;
+  --foreground: #080d0a;
+  --card: #ffffff;
+  --primary: #c7ff1a;
+  --primary-foreground: #080d0a;
+  --secondary: #e7efdc;
+  --muted-foreground: #526058;
+  --accent: #e7efdc;
+  --border: #bdcbb9;
+  --control-border: #627169;
+  --ring: #337229;
+  --destructive: #b2212b;
+  --destructive-surface: #fbe7e8;
+  --grid: #24572b0a;
+  --ambient: #40864d20;
+  --radius: 0.625rem;
+  --titlebar-height: 48px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --type-small: 12px;
+  --type-body: 14px;
+  --type-lead: 16px;
+  --type-title: 28px;
+  --type-welcome: 24px;
+}
+.dark {
+  --background: #080d0a;
+  --foreground: #f4f6ee;
+  --card: #0c1811;
+  --secondary: #102417;
+  --muted-foreground: #a4b5a9;
+  --accent: #193322;
+  --border: #294432;
+  --control-border: #83918b;
+  --ring: #c7ff1a;
+  --destructive: #f05a67;
+  --destructive-surface: #3b1b22;
+  --grid: #41634b18;
+  --ambient: #08752d42;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--control-border) var(--background);
+  }
+  html,
+  body,
+  #root {
+    margin: 0;
+    min-width: 320px;
+    height: 100%;
+  }
+  body {
+    overflow: hidden;
+    font-size: var(--type-body);
+  }
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: default;
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+  }
+  h1:focus {
+    outline: none;
+  }
+}
+.app-shell {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 0% 0%, var(--ambient), transparent 46%),
+    radial-gradient(ellipse at 100% 100%, var(--ambient), transparent 50%),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px), var(--background);
+  background-size:
+    auto,
+    auto,
+    88px 88px,
+    88px 88px,
+    auto;
+}
+.compact {
+  background: var(--background);
+}
+.workspace-host {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background);
+}
+.brand {
+  width: fit-content;
+}
+.brand img {
+  display: block;
+  height: auto;
+}
+.brand .brand-light {
+  display: none;
+}
+:root:not(.dark) .brand .brand-dark {
+  display: none;
+}
+:root:not(.dark) .brand .brand-light {
+  display: block;
+}
+/* Branded contrast and feedback apply to every radio; upstream component geometry stays unchanged. */
+[data-slot="radio-group-item"] {
+  color: var(--ring);
+}
+[data-slot="radio-group-item"][data-state="checked"] {
+  border-color: var(--ring);
+}
+[data-slot="radio-group-item"] svg {
+  fill: currentColor;
+}

@@ -1,0 +1,10 @@
+{
+  "Chart": {
+    "Symbol": "XAUUSD",
+    "Period": "m5"
+  },
+  "Parameters": {
+    "VolumeMultiplier": 1,
+    "HoldTicks": 100
+  }
+}

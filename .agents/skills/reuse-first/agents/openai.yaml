@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reuse First"
+  short_description: "Research proven solutions before custom infrastructure"
+  default_prompt: "Use $reuse-first to research existing code and maintained tools before implementing this capability."

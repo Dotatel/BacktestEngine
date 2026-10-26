@@ -1,0 +1,7 @@
+# BacktestEngine
+
+Offline-first Windows desktop application for traders, retaining the owner's existing C# backtest engine and Python validation. Tauri owns native integration, React owns the interface, and shadcn/ui provides accessible component foundations.
+
+The owner approved the full five-step onboarding, durable local preferences and custom title bar on 24 October 2026. The Build workspace has local verification evidence. The active goal continues from that foundation to an installable offline-first application: project/source/build, actual historical backtests and results, Python validation, functional optimization, reports, settings, local historical import, experimental app extensions and optional user-controlled updates. The full goal remains incomplete until each requirement has actual native/packaged acceptance evidence. Codex leads QA/review. The owner's latest instruction authorizes GPT-6.1 High subagents alongside bounded direct OpenCode workers using verified inexpensive models, superseding the earlier OpenCode-only restriction. No Paperclip, paid OpenCode fallback or credential extraction. Preserve independent review and publication/release safeguards.
+
+No account, agent, network connection or project creation is required to complete onboarding. Connecting an agent only verifies an existing local service; it never starts an AI task, sends a prompt or changes account settings.

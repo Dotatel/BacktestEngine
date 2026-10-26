@@ -1,0 +1,30 @@
+flowchart TD
+    Launcher[Project launcher] -->|Create new project| Create[Name, destination and blank/template]
+    Launcher -->|Select one of four examples| Template[Choose template and destination]
+    Template --> Create
+    Launcher -->|Open project| Picker[Native existing-project picker]
+    Launcher -->|Select recent row| Check{Project available and valid?}
+    Picker --> Check
+    Picker -->|Cancel| Launcher
+    Check -->|Yes| Overview[Project overview]
+    Check -->|Missing or invalid| Recovery[Locate, retry or remove recent entry]
+    Recovery --> Check
+    Recovery --> Launcher
+    Create -->|Cancel| Launcher
+    Create -->|Validate and create| Overview
+    Overview --> Build[Build strategy]
+    Overview --> Data[Register compatible data/profile]
+    Build --> Backtest[Configure backtest draft]
+    Data --> Backtest
+    Backtest --> Preflight{Inputs ready?}
+    Preflight -->|Repair| Backtest
+    Preflight -->|Freeze inputs and start| Job[Running job and logs]
+    Job -->|Complete| Results[Saved run: chart, trades and metrics]
+    Job -->|Failed/canceled/interrupted| Outcome[Honest outcome and recovery]
+    Outcome --> Backtest
+    Results --> Optimize[Optimize candidate]
+    Optimize --> Validate[Validate frozen candidate]
+    Results --> Report[Report saved evidence]
+    Validate --> Report
+    Results -->|Change draft: retain old run identity| Backtest
+    Overview -->|Switch project| Launcher

@@ -1,0 +1,56 @@
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Secrets and local config
+.env
+.env.*
+*.pwd
+.secrets/
+secrets/
+
+# .NET build output
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+
+# Python helper artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Data and generated artifacts
+data/
+tmp/
+artifacts/
+reports/**
+!reports/.gitkeep
+runs/**
+parity/artifacts/**
+!parity/artifacts/.gitkeep
+parity/scenarios/**/data*/
+parity/scenarios/**/data_*/*
+parity/scenarios/**/ctrader_run/**
+parity/scenarios/**/ctrader_*_run/**
+parity/scenarios/**/data_dump*_run/**
+parity/scenarios/**/probe/**
+parity/scenarios/**/engine*/
+parity/scenarios/**/comparison/**
+parity/scenarios/**/*.log
+parity/scenarios/**/*.html
+
+# cTrader generated outputs
+*.algo
+*.algo.metadata
+*.cbotset.local
+*.backtest.html
+*.backtest.json

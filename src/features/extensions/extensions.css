@@ -1,0 +1,103 @@
+.app-extensions-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: 60vh;
+  overflow: auto;
+  min-width: 0;
+}
+.app-extensions-body p {
+  margin: 0;
+}
+.app-extensions-note {
+  color: var(--muted-foreground);
+  font-size: var(--type-small);
+  line-height: 1.6;
+}
+.app-extensions-error {
+  color: var(--destructive);
+  font-size: var(--type-small);
+  line-height: 1.6;
+}
+.app-extensions-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.app-extensions-list {
+  display: flex;
+  flex-direction: column;
+}
+.app-extension {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--type-small);
+  min-width: 0;
+}
+.app-extension-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.app-extension-heading > div {
+  min-width: 0;
+}
+.app-extension h3,
+.app-extensions-report h3 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--type-body);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.app-extension-commands {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.app-extension-commands li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+.app-extension-commands small {
+  display: block;
+  color: var(--muted-foreground);
+}
+.app-extensions-report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--type-small);
+  min-width: 0;
+}
+.app-extensions-report dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.app-extensions-report dl > div {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.5fr) minmax(0, 1.5fr);
+  gap: var(--space-2);
+}
+.app-extensions-report dt {
+  color: var(--muted-foreground);
+}
+.app-extensions-report dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.app-extensions-hash {
+  overflow-wrap: anywhere;
+}

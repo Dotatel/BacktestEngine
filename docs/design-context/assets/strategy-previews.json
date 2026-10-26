@@ -1,0 +1,61 @@
+{
+  "source": "Direct native Figma state PNGs. Pixel crop metadata, not replacement artwork. Coordinates in the unscaled 1617x973 source.",
+  "size": [
+    200,
+    114
+  ],
+  "examples": [
+    {
+      "id": "ema",
+      "title": "EMA pullback",
+      "description": "Trend-following example",
+      "gray": "../screens/project-launcher/default.png",
+      "color": "../screens/project-launcher/ema.png",
+      "crop": {
+        "x": 364.5,
+        "y": 594,
+        "width": 200,
+        "height": 114
+      }
+    },
+    {
+      "id": "breakout",
+      "title": "Breakout strategy",
+      "description": "Range breakout example",
+      "gray": "../screens/project-launcher/default.png",
+      "color": "../screens/project-launcher/breakout.png",
+      "crop": {
+        "x": 621.5,
+        "y": 594,
+        "width": 200,
+        "height": 114
+      }
+    },
+    {
+      "id": "mean",
+      "title": "Mean reversion",
+      "description": "Return-to-mean example",
+      "gray": "../screens/project-launcher/default.png",
+      "color": "../screens/project-launcher/mean.png",
+      "crop": {
+        "x": 878.5,
+        "y": 594,
+        "width": 200,
+        "height": 114
+      }
+    },
+    {
+      "id": "rsi",
+      "title": "RSI reversal",
+      "description": "Momentum reversal example",
+      "gray": "../screens/project-launcher/default.png",
+      "color": "../screens/project-launcher/rsi.png",
+      "crop": {
+        "x": 1135.5,
+        "y": 594,
+        "width": 200,
+        "height": 114
+      }
+    }
+  ]
+}
