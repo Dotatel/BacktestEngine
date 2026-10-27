@@ -13,6 +13,7 @@
     "windows": [
       {
         "label": "main",
+        "create": false,
         "title": "DotaTel BacktestEngine",
         "width": 660,
         "height": 470,

@@ -217,7 +217,7 @@ export function BacktestResults({
         className="execution-result-tabs"
       >
         <header className="execution-results-heading">
-          <div className="execution-tabs-scroll">
+          <div className="workspace-tabs-scroll">
             <TabsList variant="line" aria-label="Result views">
               <TabsTrigger value="trades">Trades</TabsTrigger>
               <TabsTrigger value="statistics">Statistics</TabsTrigger>

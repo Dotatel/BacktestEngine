@@ -12,9 +12,14 @@ export function useMaximizedWindow(
     let disposed = false;
     let unsubscribe: (() => void) | undefined;
     bridge
-      .observeMaximized((value) => {
-        if (!disposed) setMaximized(value);
-      })
+      .observeMaximized(
+        (value) => {
+          if (!disposed) setMaximized(value);
+        },
+        (error) => {
+          if (!disposed) onError(errorMessage(error));
+        },
+      )
       .then((cleanup) => {
         if (disposed) cleanup();
         else unsubscribe = cleanup;

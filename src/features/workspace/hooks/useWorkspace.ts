@@ -38,7 +38,7 @@ export type WorkspaceDialog =
     }
   | { kind: "rename"; path: string }
   | { kind: "move"; path: string; parent?: string }
-  | { kind: "close-tab"; path: string }
+  | { kind: "close-tab"; path: string; paths?: string[] }
   | { kind: "conflict"; path: string }
   | { kind: "unsaved"; intent: "project" | "structure" };
 
@@ -60,6 +60,8 @@ export function useWorkspace(props: BuildWorkspaceProps) {
   const [dialog, setDialog] = useState<WorkspaceDialog | null>(null);
   const [dialogError, setDialogError] = useState("");
   const [notice, setNotice] = useState<WorkspaceNotice | null>(null);
+  const [closingTabs, setClosingTabs] = useState(false);
+  const closeInFlight = useRef(false);
   const pendingAction = useRef<(() => Promise<void>) | null>(null);
   const booted = useRef(false);
   const viewRoot = useRef<string | null>(null);
@@ -85,7 +87,7 @@ export function useWorkspace(props: BuildWorkspaceProps) {
   }, []);
 
   const dismissDialog = useCallback(() => {
-    if (project.busy) return;
+    if (project.busy || closeInFlight.current) return;
     pendingAction.current = null;
     setDialog(null);
     setDialogError("");
@@ -308,15 +310,31 @@ export function useWorkspace(props: BuildWorkspaceProps) {
     [guardUnsaved, openDialog],
   );
 
-  const requestClose = useCallback(
-    (path: string) => {
-      if (documents.documents[path]?.dirty) {
-        openDialog({ kind: "close-tab", path });
+  /** Snapshot requested open tabs; dirty files share one explicit decision and clean files close atomically. */
+  const requestCloseTabs = useCallback(
+    (paths: string[]) => {
+      if (dialog || closeInFlight.current || project.busy) return;
+      const targets = documents.openPaths.filter((path) =>
+        paths.includes(path),
+      );
+      if (!targets.length) return;
+      if (targets.some((path) => documents.documents[path]?.dirty)) {
+        openDialog({ kind: "close-tab", path: targets[0], paths: targets });
         return;
       }
-      documents.close(path);
+      if (!documents.closeMany(targets))
+        announce(
+          "Wait for the files to finish saving before closing their tabs.",
+          "error",
+        );
     },
-    [documents, openDialog],
+    [announce, dialog, documents, openDialog, project.busy],
+  );
+
+  /** Use the same guarded close transaction for a tab's button, Delete key and context-menu Close. */
+  const requestClose = useCallback(
+    (path: string) => requestCloseTabs([path]),
+    [requestCloseTabs],
   );
 
   /** Resolve the unsaved-changes gate with an explicit save or discard choice. */
@@ -345,24 +363,49 @@ export function useWorkspace(props: BuildWorkspaceProps) {
     [dismissDialog, documents.saveAll, handleSaveFailure],
   );
 
+  /** Save only the closing tabs and preserve the normal external-revision conflict recovery. */
+  const saveClosingTabs = useCallback(
+    async (paths: string[]) => {
+      const outcome = await documents.saveSelected(paths);
+      if (outcome.ok) return true;
+      setDialogError(
+        outcome.message ??
+          "The files could not be saved. Your drafts are preserved.",
+      );
+      handleSaveFailure(outcome);
+      return false;
+    },
+    [documents.saveSelected, handleSaveFailure],
+  );
+
+  /** Commit the whole close set only after save or explicit discard; cancellation and conflicts remove no tabs. */
   const resolveCloseTab = useCallback(
     async (choice: "save" | "discard" | "cancel") => {
-      if (dialog?.kind !== "close-tab") return;
+      if (dialog?.kind !== "close-tab" || closeInFlight.current) return;
       if (choice === "cancel") {
         dismissDialog();
         return;
       }
-      if (choice === "save") {
-        const outcome = await documents.save(dialog.path);
-        if (!outcome.ok) {
-          handleSaveFailure(outcome);
+      const paths = dialog.paths ?? [dialog.path];
+      const root = viewRoot.current;
+      closeInFlight.current = true;
+      setClosingTabs(true);
+      try {
+        const saved = choice === "discard" || (await saveClosingTabs(paths));
+        if (!saved || root !== viewRoot.current) return;
+        if (!documents.closeMany(paths, choice === "discard")) {
+          setDialogError(
+            "Files are still saving or changed again. Review their drafts before closing.",
+          );
           return;
         }
+        setDialog(null);
+      } finally {
+        closeInFlight.current = false;
+        setClosingTabs(false);
       }
-      documents.close(dialog.path);
-      setDialog(null);
     },
-    [dialog, dismissDialog, documents, handleSaveFailure],
+    [dialog, dismissDialog, documents.closeMany, saveClosingTabs],
   );
 
   /** Validate and create one entry, then open a new file without inventing content. */
@@ -554,7 +597,7 @@ export function useWorkspace(props: BuildWorkspaceProps) {
     parameters,
     dialog,
     dialogError,
-    dialogBusy: project.busy,
+    dialogBusy: project.busy || closingTabs,
     notice,
     dirty,
     sourceFile,
@@ -567,6 +610,7 @@ export function useWorkspace(props: BuildWorkspaceProps) {
     requestRename,
     requestMove,
     requestClose,
+    requestCloseTabs,
     resolveUnsaved,
     resolveCloseTab,
     submitCreate,

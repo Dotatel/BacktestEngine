@@ -10,20 +10,28 @@ import {
 import { type DesktopBridge } from "@/lib/desktop";
 import { errorMessage } from "@/lib/preferences";
 import { useMaximizedWindow } from "@/hooks/useMaximizedWindow";
+import type { AppMenuController } from "@/lib/app-menu-contract";
+import { AppMenu } from "./AppMenu";
 import "./title-bar.css";
 
 interface TitleBarProps {
   bridge: DesktopBridge;
   onError(message: string): void;
   beforeClose?(): Promise<void | boolean>;
+  menu?: AppMenuController;
 }
 
 /** Render an integrated application header with standard shadcn controls and actual native window actions. */
-export function TitleBar({ bridge, onError, beforeClose }: TitleBarProps) {
+export function TitleBar({
+  bridge,
+  onError,
+  beforeClose,
+  menu,
+}: TitleBarProps) {
   const maximized = useMaximizedWindow(bridge, onError);
 
   /** Keep window failures actionable without hiding storage failures in the setup controller. */
-  async function perform(action: () => Promise<void>) {
+  async function perform(action: () => void | Promise<void>) {
     onError("");
     try {
       await action();
@@ -63,7 +71,23 @@ export function TitleBar({ bridge, onError, beforeClose }: TitleBarProps) {
   ];
 
   return (
-    <header className="titlebar" aria-label="Window title bar">
+    <header
+      className={`titlebar${menu ? " titlebar--workspace" : ""}`}
+      aria-label="Window title bar"
+    >
+      {menu ? (
+        <AppMenu
+          controller={menu}
+          perform={(action) => void perform(action)}
+          windowActions={{
+            native: bridge.native,
+            maximized,
+            minimize: () => void perform(() => bridge.minimize()),
+            toggleMaximize: () => void perform(() => bridge.toggleMaximize()),
+            close: () => void perform(closeWindow),
+          }}
+        />
+      ) : null}
       <div
         className="titlebar-drag"
         onMouseDown={(event) => {
@@ -75,8 +99,14 @@ export function TitleBar({ bridge, onError, beforeClose }: TitleBarProps) {
           void perform(() => bridge.startDragging());
         }}
       >
-        <Brand className="titlebar-brand" />
-        <span className="titlebar-product">BacktestEngine</span>
+        {menu ? (
+          <span className="titlebar-workspace-caption">BacktestEngine</span>
+        ) : (
+          <>
+            <Brand className="titlebar-brand" />
+            <span className="titlebar-product">BacktestEngine</span>
+          </>
+        )}
       </div>
       <TooltipProvider delayDuration={450}>
         <div className="window-controls" aria-label="Window controls">

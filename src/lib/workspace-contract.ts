@@ -1,4 +1,5 @@
 import type { Appearance, WorkspaceStyle } from "./preferences";
+import type { AppMenuController } from "./app-menu-contract";
 
 /** One project-relative explorer item; identifiers use forward slashes and never escape the selected root. */
 export interface WorkspaceEntry {
@@ -114,4 +115,5 @@ export interface BuildWorkspaceProps {
   onReviewSetup(): void;
   onDirtyChange?(dirty: boolean): void;
   onFlushChange?(flush: (() => Promise<void>) | null): void;
+  onMenuChange?(controller: AppMenuController | null): void;
 }

@@ -307,6 +307,8 @@ function CloseBody({
   controller,
 }: DialogBodyProps<Extract<WorkspaceDialog, { kind: "close-tab" }>>) {
   const [working, setWorking] = useState(false);
+  const count = dialog.paths?.length ?? 1;
+  const multiple = count > 1;
 
   /** Finish the explicit close choice and keep the dialog open if saving fails. */
   async function choose(choice: "save" | "discard") {
@@ -318,10 +320,13 @@ function CloseBody({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Close {nameOf(dialog.path)}?</DialogTitle>
+        <DialogTitle>
+          {multiple ? `Close ${count} tabs?` : `Close ${nameOf(dialog.path)}?`}
+        </DialogTitle>
         <DialogDescription>
-          This file has unsaved changes. Save them before closing the tab, or
-          discard the draft.
+          {multiple
+            ? "Some selected files have unsaved changes. Save only these files or discard their drafts before closing the selected tabs. Cancel keeps every selected tab open."
+            : "This file has unsaved changes. Save them before closing the tab, or discard the draft."}
         </DialogDescription>
       </DialogHeader>
       <DialogError message={controller.dialogError} />
@@ -338,13 +343,13 @@ function CloseBody({
           onClick={() => void choose("discard")}
           disabled={working}
         >
-          Discard
+          {multiple ? "Discard and close all selected" : "Discard"}
         </Button>
         <Button onClick={() => void choose("save")} disabled={working}>
           {working ? (
             <LoaderCircle className="spinner" aria-hidden="true" />
           ) : null}
-          Save and close
+          {multiple ? "Save all selected and close" : "Save"}
         </Button>
       </DialogFooter>
     </>

@@ -19,6 +19,7 @@ export interface CodeEditorProps {
   revealLine: { line: number; column: number; nonce: number } | null;
   onChange(value: string): void;
   onSave(): void;
+  onEditorReady?(instance: editor.IStandaloneCodeEditor | null): void;
 }
 
 /**
@@ -35,17 +36,30 @@ export default function CodeEditor({
   revealLine,
   onChange,
   onSave,
+  onEditorReady,
 }: CodeEditorProps) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const saveRef = useRef(onSave);
   saveRef.current = onSave;
 
-  const handleMount = useCallback<OnMount>((instance, monaco) => {
-    editorRef.current = instance;
-    instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () =>
-      saveRef.current(),
-    );
-  }, []);
+  const handleMount = useCallback<OnMount>(
+    (instance, monaco) => {
+      editorRef.current = instance;
+      onEditorReady?.(instance);
+      instance.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () =>
+        saveRef.current(),
+      );
+    },
+    [onEditorReady],
+  );
+
+  useEffect(
+    () => () => {
+      onEditorReady?.(null);
+      editorRef.current = null;
+    },
+    [onEditorReady],
+  );
 
   useEffect(() => {
     if (!revealLine || !editorRef.current) return;
@@ -62,7 +76,9 @@ export default function CodeEditor({
     <div className="code-editor" data-language={language}>
       <Editor
         path={path}
-        value={value}
+        // Monaco owns the live buffer; replaying React draft echoes can overwrite newer keystrokes.
+        // Authoritative reads use an explicit parent key; saves preserve the cursor and undo stack.
+        defaultValue={value}
         language={language}
         theme={editorTheme(dark)}
         beforeMount={() => configureMonaco()}

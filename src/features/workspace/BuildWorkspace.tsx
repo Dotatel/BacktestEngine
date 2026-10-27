@@ -47,6 +47,8 @@ import { assistant } from "@/lib/assistant";
 import { savedRuns } from "@/lib/saved-runs";
 import type { SavedRunSelection } from "@/lib/saved-runs-contract";
 import { useWorkspaceFlush } from "./hooks/useWorkspaceFlush";
+import { useWorkspaceMenu } from "./hooks/useWorkspaceMenu";
+import type { editor } from "monaco-editor";
 import "./workspace.css";
 import "@/features/execution/execution.css";
 
@@ -77,6 +79,9 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
   const [optimizationBusy, setOptimizationBusy] = useState(false);
   const [validationBusy, setValidationBusy] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [editorInstance, setEditorInstance] =
+    useState<editor.IStandaloneCodeEditor | null>(null);
+  const [commandError, setCommandError] = useState("");
   const [savedSelection, setSavedSelection] =
     useState<SavedRunSelection | null>(null);
   useEffect(() => {
@@ -99,7 +104,6 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
     inspectorIntent,
     setInspectorCollapsed,
   );
-  useSaveShortcut(workspace.saveActive, backtestBusy || optimizationBusy);
 
   const stage = stageFor(workspace);
   const openingStoredProject =
@@ -152,6 +156,28 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
     void session.flush().catch(() => undefined);
   }
 
+  useWorkspaceMenu({
+    workspace,
+    editor: editorInstance,
+    buildVisible: activeStage === "build",
+    executionBusy: backtestBusy || optimizationBusy || validationBusy,
+    native: props.bridge.native,
+    explorerVisible: activeStage === "build" && !explorerCollapsed,
+    parametersVisible: activeStage === "build" && !inspectorCollapsed,
+    assistantVisible: assistantOpen,
+    toggleExplorer: () => {
+      if (activeStage === "build" || explorerCollapsed) toggleExplorer();
+      setActiveStage("build");
+    },
+    toggleParameters: () => {
+      if (activeStage === "build" || inspectorCollapsed) toggleInspector();
+      setActiveStage("build");
+    },
+    toggleAssistant: () => setAssistantOpen((open) => !open),
+    reportError: setCommandError,
+    register: props.onMenuChange,
+  });
+
   return (
     <section
       className="build-workspace"
@@ -193,10 +219,17 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
         />
         <div className="workspace-main">
           <WorkspaceBanners
-            notice={workspace.notice}
+            notice={
+              commandError
+                ? { text: commandError, tone: "error" }
+                : workspace.notice
+            }
             saveError={session.saveError}
             projectError={project.error}
-            onDismissNotice={workspace.dismissNotice}
+            onDismissNotice={() => {
+              setCommandError("");
+              workspace.dismissNotice();
+            }}
             onRetrySave={retrySessionSave}
             onDismissProjectError={project.clearError}
             onRetryProject={workspace.retryStoredProject}
@@ -277,6 +310,8 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
                           documents={documents}
                           dark={dark}
                           onCloseTab={workspace.requestClose}
+                          onCloseTabs={workspace.requestCloseTabs}
+                          onEditorReady={setEditorInstance}
                           onSave={() => void workspace.saveActive()}
                         />
                       </ResizablePanel>
@@ -686,29 +721,6 @@ function useCompactInspector(
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
   }, [active, intent, panel, setCollapsed]);
-}
-
-/** Save the active file on Ctrl/Cmd+S without letting the browser open Save Page. */
-function useSaveShortcut(save: () => Promise<void>, busy: boolean) {
-  useEffect(() => {
-    /** Intercept only the platform save shortcut and delegate the real write. */
-    function onKeyDown(event: KeyboardEvent) {
-      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
-      if (event.key.toLocaleLowerCase() !== "s") return;
-      event.preventDefault();
-      event.stopPropagation();
-      if (
-        busy ||
-        document.querySelector(
-          '[role="dialog"][data-state="open"], [role="alertdialog"][data-state="open"]',
-        )
-      )
-        return;
-      void save();
-    }
-    window.addEventListener("keydown", onKeyDown, true);
-    return () => window.removeEventListener("keydown", onKeyDown, true);
-  }, [save, busy]);
 }
 
 /** Apply saved layout choices through the existing panel without replacing editor or draft state. */

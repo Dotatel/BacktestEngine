@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import {
   ChevronDown,
@@ -13,7 +13,12 @@ import {
   Pencil,
   RefreshCw,
 } from "lucide-react";
-import { Tree, type NodeApi, type NodeRendererProps } from "react-arborist";
+import {
+  Tree,
+  type NodeApi,
+  type NodeRendererProps,
+  type RowRendererProps,
+} from "react-arborist";
 import type {
   WorkspaceEntry,
   WorkspaceProject,
@@ -71,7 +76,7 @@ export function ProjectExplorer({
   onCollapse,
 }: ProjectExplorerProps) {
   const [selected, setSelected] = useState<string | null>(activePath);
-  const treeArea = useElementSize<HTMLDivElement>();
+  const treeArea = useElementHeight<HTMLDivElement>();
   const entries = useMemo(
     () => decorateEntries(project.entries, documents),
     [documents, project.entries],
@@ -82,8 +87,7 @@ export function ProjectExplorer({
   }, [activePath]);
 
   const targetFolder = folderForTarget(project.entries, selected, activePath);
-  const height = Math.max(120, Math.floor(treeArea.height));
-  const width = Math.max(140, Math.floor(treeArea.width));
+  const height = Math.max(0, Math.floor(treeArea.height));
 
   /** Treat activation as opening a file or toggling a folder while keeping one selected entry. */
   function activate(entry: ExplorerEntry, toggle: () => void) {
@@ -177,8 +181,11 @@ export function ProjectExplorer({
             idAccessor="id"
             childrenAccessor="children"
             openByDefault
-            width={width}
+            width="100%"
             height={height}
+            paddingTop={4}
+            paddingBottom={4}
+            renderRow={ExplorerRow}
             rowHeight={26}
             indent={14}
             selection={activePath ?? undefined}
@@ -210,6 +217,26 @@ export function ProjectExplorer({
   );
 }
 
+/** Keep Arborist row semantics while allowing labels to shrink within the available viewport. */
+function ExplorerRow({
+  node,
+  attrs,
+  innerRef,
+  children,
+}: RowRendererProps<ExplorerEntry>) {
+  return (
+    <div
+      {...attrs}
+      ref={innerRef}
+      style={{ ...attrs.style, minWidth: 0 }}
+      onFocus={(event) => event.stopPropagation()}
+      onClick={node.handleClick}
+    >
+      {children}
+    </div>
+  );
+}
+
 /** Render one tree row, attaching the tree's drag handle so rows can actually be dragged. */
 function ExplorerNode({
   node,
@@ -234,7 +261,9 @@ function ExplorerNode({
       ) : (
         <FileCode2 className="explorer-icon" aria-hidden="true" />
       )}
-      <span className="explorer-name">{entry.name}</span>
+      <span className="explorer-name" title={entry.name}>
+        {entry.name}
+      </span>
       {entry.dirty && (
         <span className="explorer-dirty" aria-label="Unsaved changes" />
       )}
@@ -299,24 +328,22 @@ function folderForTarget(
   return directoryOf(path);
 }
 
-/** Observe a container's content box so the virtualized tree gets real pixel dimensions. */
-function useElementSize<T extends HTMLElement>() {
+/** Fit the virtualized list to the content height; Arborist alone owns its scrollbars and row padding. */
+function useElementHeight<T extends HTMLElement>() {
   const ref = useRef<T | null>(null);
-  const [size, setSize] = useState({ width: 0, height: 0 });
-  const measure = useCallback((element: T) => {
-    const rect = element.getBoundingClientRect();
-    setSize({ width: rect.width, height: rect.height });
-  }, []);
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-    measure(element);
+    setHeight(element.clientHeight);
     if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(() => measure(element));
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) setHeight(entry.contentRect.height);
+    });
     observer.observe(element);
     return () => observer.disconnect();
-  }, [measure]);
+  }, []);
 
-  return { ref, width: size.width, height: size.height };
+  return { ref, height };
 }

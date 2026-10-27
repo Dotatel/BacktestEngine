@@ -18,6 +18,7 @@ import {
 import { useOnboarding } from "@/features/onboarding/useOnboarding";
 import { workspace, type WorkspaceBridge } from "@/lib/workspace";
 import { useWindowCloseGuard } from "@/hooks/useWindowCloseGuard";
+import type { AppMenuController } from "@/lib/app-menu-contract";
 
 const BuildWorkspace = lazy(() =>
   import("@/features/workspace/BuildWorkspace").then((module) => ({
@@ -37,6 +38,9 @@ export function App({
   const { preferences, loadState, saving } = setup.store;
   const heading = useRef<HTMLHeadingElement>(null);
   const [workspaceDirty, setWorkspaceDirty] = useState(false);
+  const [workspaceMenu, setWorkspaceMenu] = useState<AppMenuController | null>(
+    null,
+  );
   const workspaceFlush = useRef<(() => Promise<void>) | null>(null);
   const registerWorkspaceFlush = useCallback(
     (flush: (() => Promise<void>) | null) => {
@@ -74,11 +78,14 @@ export function App({
   }, [loadState, preferences.step, preferences.completed]);
 
   return (
-    <div className={`app-shell ${compact ? "compact" : "expanded"}`}>
+    <div
+      className={`app-shell ${compact ? "compact" : "expanded"}${showWorkspace ? " app-shell--workspace" : ""}`}
+    >
       <TitleBar
         bridge={bridge}
         onError={setup.reportError}
         beforeClose={canLeave}
+        menu={showWorkspace ? (workspaceMenu ?? undefined) : undefined}
       />
       <main
         className={showWorkspace ? "workspace-host" : "onboarding"}
@@ -103,6 +110,7 @@ export function App({
               onReviewSetup={() => void reviewSetup()}
               onDirtyChange={setWorkspaceDirty}
               onFlushChange={registerWorkspaceFlush}
+              onMenuChange={setWorkspaceMenu}
             />
           </Suspense>
         ) : (

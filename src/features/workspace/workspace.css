@@ -201,6 +201,7 @@
   background: var(--background);
 }
 .explorer-project {
+  min-width: 0;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -209,6 +210,9 @@
   border-bottom: 1px solid var(--border);
 }
 .explorer-project__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--type-body);
   font-weight: 650;
 }
@@ -221,9 +225,9 @@
 }
 .explorer-tree {
   flex: 1;
+  min-width: 0;
   min-height: 0;
-  overflow: auto;
-  padding: var(--space-1) 0;
+  overflow: hidden;
 }
 .explorer-node {
   display: flex;
@@ -243,6 +247,7 @@
   background: var(--accent);
 }
 .explorer-twisty {
+  flex-shrink: 0;
   width: 14px;
   display: inline-flex;
   align-items: center;
@@ -263,11 +268,14 @@
   color: var(--primary);
 }
 .explorer-name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .explorer-dirty {
+  flex-shrink: 0;
   width: 6px;
   height: 6px;
   margin-left: auto;
@@ -302,24 +310,22 @@
 }
 .file-tabs {
   flex-shrink: 0;
-  display: flex;
+  display: grid;
+  grid-auto-columns: max-content;
   align-items: center;
-  min-height: 36px;
-  border-bottom: 1px solid var(--border);
-  background: var(--background);
-}
-.file-tabs__list {
-  flex: 1;
   min-width: 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 0;
+  min-height: 36px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
 }
-.file-tabs__list::-webkit-scrollbar {
+.file-tabs__list,
+.file-tabs__actions {
+  display: contents;
+}
+.file-tabs::-webkit-scrollbar {
   display: none;
 }
 .file-tab {
@@ -327,9 +333,16 @@
   align-items: center;
   flex: 0 0 auto;
   max-width: 260px;
+  align-self: stretch;
+}
+.file-tab__action {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
   border-right: 1px solid var(--border);
 }
-.file-tab[data-active="true"] {
+.file-tab[data-active="true"],
+.file-tab__action[data-active="true"] {
   background: var(--card);
 }
 .file-tab__label {

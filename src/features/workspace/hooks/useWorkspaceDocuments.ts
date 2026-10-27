@@ -21,6 +21,8 @@ export interface WorkspaceDocumentView {
   draft: string;
   saved: string;
   revision: string;
+  /** Changes only after an authoritative read/reload, independently of saves and local typing. */
+  readVersion: number;
   status: "loading" | "ready" | "error";
   error: string;
   conflict: boolean;
@@ -48,9 +50,11 @@ export interface WorkspaceDocumentsController {
   restore(paths: string[], active: string | null): Promise<void>;
   activate(path: string): void;
   close(path: string): void;
+  closeMany(paths: string[], discardDrafts?: boolean): boolean;
   update(path: string, draft: string): void;
   save(path: string): Promise<SaveOutcome>;
   saveAll(): Promise<SaveOutcome>;
+  saveSelected(paths: string[]): Promise<SaveOutcome>;
   reload(path: string): Promise<SaveOutcome>;
   remap(from: string, to: string, isFolder: boolean): void;
   requestReveal(path: string, line: number, column: number): void;
@@ -61,6 +65,7 @@ interface DocumentRecord {
   draft: string;
   saved: string;
   revision: string;
+  readVersion: number;
   status: "loading" | "ready" | "error";
   error: string;
   conflict: boolean;
@@ -71,6 +76,7 @@ const emptyRecord: DocumentRecord = {
   draft: "",
   saved: "",
   revision: "",
+  readVersion: 0,
   status: "loading",
   error: "",
   conflict: false,
@@ -94,6 +100,7 @@ export function useWorkspaceDocuments(
   const openRef = useRef<string[]>([]);
   const activeRef = useRef<string | null>(null);
   const loadTokens = useRef<Record<string, number>>({});
+  const readVersion = useRef(0);
   const generation = useRef(0);
   const savedEpochRef = useRef(0);
   const pendingSaves = useRef<Map<string, Promise<SaveOutcome>>>(new Map());
@@ -146,9 +153,10 @@ export function useWorkspaceDocuments(
       try {
         const document = await bridge.readDocument(path);
         if (isStaleLoad(path, token, loadGeneration)) return false;
+        readVersion.current += 1;
         commit((previous) => ({
           ...previous,
-          [path]: recordFromDocument(document),
+          [path]: recordFromDocument(document, readVersion.current),
         }));
         return true;
       } catch (failure) {
@@ -220,6 +228,39 @@ export function useWorkspaceDocuments(
       if (activeRef.current === path)
         setActivePath(next[Math.max(0, index - 1)] ?? null);
       setReveal((current) => (current?.path === path ? null : current));
+    },
+    [commit, setActivePath, setOpenPaths],
+  );
+
+  /** Close a captured set atomically; pending writes and unapproved dirty drafts leave every tab intact. */
+  const closeMany = useCallback(
+    (paths: string[], discardDrafts = false): boolean => {
+      const selected = new Set(paths);
+      const targets = openRef.current.filter((path) => selected.has(path));
+      if (targets.some((path) => recordsRef.current[path]?.saving))
+        return false;
+      if (!discardDrafts && hasDirtyDrafts(targets, recordsRef.current))
+        return false;
+      const oldPaths = openRef.current;
+      const next = oldPaths.filter((path) => !selected.has(path));
+      const activeIndex = oldPaths.indexOf(activeRef.current ?? "");
+      for (const path of targets) delete loadTokens.current[path];
+      commit((previous) =>
+        Object.fromEntries(
+          Object.entries(previous).filter(([path]) => !selected.has(path)),
+        ),
+      );
+      setOpenPaths(next);
+      if (activeRef.current && selected.has(activeRef.current)) {
+        const preceding = oldPaths
+          .slice(0, activeIndex)
+          .filter((path) => !selected.has(path));
+        setActivePath(preceding.at(-1) ?? next[0] ?? null);
+      }
+      setReveal((current) =>
+        current && selected.has(current.path) ? null : current,
+      );
+      return true;
     },
     [commit, setActivePath, setOpenPaths],
   );
@@ -377,6 +418,33 @@ export function useWorkspaceDocuments(
     };
   }, [save]);
 
+  /** Save only a captured tab set, rechecking earlier files for edits and rejecting a changed project generation. */
+  const saveSelected = useCallback(
+    async (paths: string[]): Promise<SaveOutcome> => {
+      const targets = [...new Set(paths)].filter((path) =>
+        openRef.current.includes(path),
+      );
+      const saveGeneration = generation.current;
+      for (let pass = 0; pass < 3; pass += 1) {
+        if (generation.current !== saveGeneration)
+          return staleSave(targets[0] ?? "");
+        const failure = await savePaths(targets, save);
+        if (failure) return failure;
+        if (generation.current !== saveGeneration)
+          return staleSave(targets[0] ?? "");
+        if (!hasDirtyDrafts(targets, recordsRef.current))
+          return { ok: true, conflict: false, epoch: savedEpochRef.current };
+      }
+      return {
+        ok: false,
+        conflict: false,
+        message:
+          "Files kept changing while being saved. Review their drafts before closing.",
+      };
+    },
+    [save],
+  );
+
   /** Explicitly discard a draft after a conflict by reading the host's current content. */
   const reload = useCallback(
     async (path: string): Promise<SaveOutcome> => {
@@ -462,9 +530,11 @@ export function useWorkspaceDocuments(
     restore,
     activate,
     close,
+    closeMany,
     update,
     save,
     saveAll,
+    saveSelected,
     reload,
     remap,
     requestReveal,
@@ -482,6 +552,7 @@ function documentView(
     draft: record.draft,
     saved: record.saved,
     revision: record.revision,
+    readVersion: record.readVersion,
     status: record.status,
     error: record.error,
     conflict: record.conflict,
@@ -490,12 +561,16 @@ function documentView(
   };
 }
 
-/** Convert a fresh host document into a clean savepoint record. */
-function recordFromDocument(document: WorkspaceDocument): DocumentRecord {
+/** Convert an authoritative read into a savepoint and an explicit editor-reset identity. */
+function recordFromDocument(
+  document: WorkspaceDocument,
+  readVersion: number,
+): DocumentRecord {
   return {
     draft: document.content,
     saved: document.content,
     revision: document.revision,
+    readVersion,
     status: "ready",
     error: "",
     conflict: false,

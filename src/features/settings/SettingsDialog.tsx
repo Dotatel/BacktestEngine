@@ -70,7 +70,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
         </DialogHeader>
         <div className="app-settings-body">
           <Tabs defaultValue="general">
-            <div className="app-settings-tabs">
+            <div className="workspace-tabs-scroll">
               <TabsList variant="line" aria-label="Settings sections">
                 <TabsTrigger value="general">General</TabsTrigger>
                 <TabsTrigger value="updates">Updates</TabsTrigger>

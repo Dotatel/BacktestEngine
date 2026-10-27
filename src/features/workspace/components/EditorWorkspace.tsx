@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import type { editor } from "monaco-editor";
 import { CircleAlert, LoaderCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,6 +8,7 @@ import type {
   WorkspaceDocumentView,
   WorkspaceDocumentsController,
 } from "../hooks/useWorkspaceDocuments";
+import { EditorTabMenu } from "./EditorTabMenu";
 
 const CodeEditor = lazy(() => import("./CodeEditor"));
 const noFileValue = "__no_file__";
@@ -17,7 +19,9 @@ export interface EditorWorkspaceProps {
   documents: WorkspaceDocumentsController;
   dark: boolean;
   onCloseTab(path: string): void;
+  onCloseTabs(paths: string[]): void;
   onSave(): void;
+  onEditorReady?(editor: editor.IStandaloneCodeEditor | null): void;
 }
 
 /** Render open file tabs and the real source editor, including loading and conflict states. */
@@ -26,7 +30,9 @@ export function EditorWorkspace({
   documents,
   dark,
   onCloseTab,
+  onCloseTabs,
   onSave,
+  onEditorReady,
 }: EditorWorkspaceProps) {
   const active = documents.activePath
     ? (documents.documents[documents.activePath] ?? null)
@@ -53,49 +59,78 @@ export function EditorWorkspace({
               className="file-tabs__list"
               aria-label="Open files"
             >
-              {documents.openPaths.map((path) => (
-                <div
+              {documents.openPaths.map((path, index) => (
+                <EditorTabMenu
                   key={path}
-                  className="file-tab"
-                  data-active={path === documents.activePath}
+                  path={path}
+                  paths={documents.openPaths}
+                  onClose={onCloseTab}
+                  onCloseTabs={onCloseTabs}
                 >
-                  <TabsTrigger
-                    value={path}
-                    className="file-tab__label"
-                    title={path}
-                    onKeyDown={(event) => {
-                      if (event.key !== "Delete") return;
-                      event.preventDefault();
-                      onCloseTab(path);
-                    }}
+                  <div
+                    className="file-tab"
+                    data-active={path === documents.activePath}
+                    style={{ gridColumn: index * 2 + 1, gridRow: 1 }}
                   >
-                    <span className="file-tab__name">{nameOf(path)}</span>
-                    {documents.documents[path]?.dirty && (
-                      <>
-                        <span className="file-tab__dirty" aria-hidden="true">
-                          ●
-                        </span>
-                        <span className="sr-only">Unsaved changes</span>
-                      </>
-                    )}
-                  </TabsTrigger>
-                </div>
+                    <TabsTrigger
+                      value={path}
+                      className="file-tab__label"
+                      title={path}
+                      onKeyDown={(event) => {
+                        if (event.key !== "Delete") return;
+                        event.preventDefault();
+                        onCloseTab(path);
+                      }}
+                    >
+                      <span className="file-tab__name">{nameOf(path)}</span>
+                      {documents.documents[path]?.dirty && (
+                        <>
+                          <span className="file-tab__dirty" aria-hidden="true">
+                            ●
+                          </span>
+                          <span className="sr-only">Unsaved changes</span>
+                        </>
+                      )}
+                    </TabsTrigger>
+                  </div>
+                </EditorTabMenu>
               ))}
             </TabsList>
           ) : (
             <span className="file-tabs__empty">No files open</span>
           )}
-          {documents.activePath && (
-            <Button
-              variant="ghost"
-              size="icon-xs"
-              className="file-tab__close"
-              aria-label={`Close ${nameOf(documents.activePath)}`}
-              onClick={() => onCloseTab(documents.activePath!)}
-            >
-              <X aria-hidden="true" />
-            </Button>
-          )}
+          <div
+            className="file-tabs__actions"
+            role="group"
+            aria-label="Close open files"
+          >
+            {documents.openPaths.map((path, index) => (
+              <EditorTabMenu
+                key={path}
+                path={path}
+                paths={documents.openPaths}
+                onClose={onCloseTab}
+                onCloseTabs={onCloseTabs}
+              >
+                <div
+                  className="file-tab__action"
+                  data-active={path === documents.activePath}
+                  style={{ gridColumn: index * 2 + 2, gridRow: 1 }}
+                >
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    className="file-tab__close"
+                    aria-label={`Close ${nameOf(path)}`}
+                    title={`Close ${path}`}
+                    onClick={() => onCloseTab(path)}
+                  >
+                    <X aria-hidden="true" />
+                  </Button>
+                </div>
+              </EditorTabMenu>
+            ))}
+          </div>
         </div>
         {active?.conflict && (
           <p className="editor-conflict" role="alert">
@@ -119,6 +154,7 @@ export function EditorWorkspace({
               onDraft={(value) => documents.update(path, value)}
               onRetry={() => void documents.reload(path)}
               onSave={onSave}
+              onEditorReady={onEditorReady}
             />
           </TabsContent>
         ))}
@@ -132,6 +168,7 @@ export function EditorWorkspace({
               onDraft={() => undefined}
               onRetry={() => undefined}
               onSave={onSave}
+              onEditorReady={onEditorReady}
             />
           </div>
         )}
@@ -149,6 +186,7 @@ interface EditorSurfaceProps {
   onDraft(value: string): void;
   onRetry(): void;
   onSave(): void;
+  onEditorReady?(editor: editor.IStandaloneCodeEditor | null): void;
 }
 
 /** Render loading, error, empty and ready editor states without inventing file contents. */
@@ -160,6 +198,7 @@ function EditorSurface({
   onDraft,
   onRetry,
   onSave,
+  onEditorReady,
 }: EditorSurfaceProps) {
   if (!document) {
     return (
@@ -195,6 +234,7 @@ function EditorSurface({
       }
     >
       <CodeEditor
+        key={`${root}/${document.path}:${document.readVersion}`}
         path={`${root.replaceAll("\\", "/")}/${document.path}`}
         value={document.draft}
         language={languageForPath(document.path)}
@@ -204,6 +244,7 @@ function EditorSurface({
         revealLine={reveal}
         onChange={onDraft}
         onSave={onSave}
+        onEditorReady={onEditorReady}
       />
     </Suspense>
   );

@@ -836,6 +836,17 @@ pub fn run() {
                 data_dir.join("assistant"),
                 agents::find_opencode,
             ));
+            // Monaco's menu Paste uses the Web Clipboard API; enable it only for our local main window.
+            let main_window = app
+                .config()
+                .app
+                .windows
+                .iter()
+                .find(|window| window.label == "main")
+                .ok_or("The main window configuration is missing")?;
+            tauri::WebviewWindowBuilder::from_config(app, main_window)?
+                .enable_clipboard_access()
+                .build()?;
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

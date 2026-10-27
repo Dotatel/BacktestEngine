@@ -151,6 +151,9 @@
 .compact {
   background: var(--background);
 }
+.app-shell--workspace {
+  background: var(--background);
+}
 .workspace-host {
   flex: 1;
   min-height: 0;
@@ -158,6 +161,13 @@
   flex-direction: column;
   overflow: hidden;
   background: var(--background);
+}
+/* Line-tab indicators extend below the list; reserve their paint space without resizing controls. */
+.workspace-tabs-scroll {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 3px;
 }
 .brand {
   width: fit-content;

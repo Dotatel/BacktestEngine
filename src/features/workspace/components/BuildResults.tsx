@@ -26,18 +26,20 @@ export function BuildResults({ build, onOpenDiagnostic }: BuildResultsProps) {
     >
       <Tabs defaultValue="problems" className="results-tabs">
         <div className="results-bar">
-          <TabsList variant="line" aria-label="Build results">
-            <TabsTrigger value="problems">
-              Problems
-              <span
-                className="results-count"
-                aria-label={`${diagnostics.length} items`}
-              >
-                {diagnostics.length}
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="output">Output</TabsTrigger>
-          </TabsList>
+          <div className="workspace-tabs-scroll">
+            <TabsList variant="line" aria-label="Build results">
+              <TabsTrigger value="problems">
+                Problems
+                <span
+                  className="results-count"
+                  aria-label={`${diagnostics.length} items`}
+                >
+                  {diagnostics.length}
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="output">Output</TabsTrigger>
+            </TabsList>
+          </div>
           <div className="results-summary" role="status">
             {summaryText(build, errors, warnings)}
             {build.stale && (

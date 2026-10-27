@@ -27,7 +27,10 @@ export interface DesktopBridge {
   toggleMaximize(): Promise<void>;
   startDragging(): Promise<void>;
   close(): Promise<void>;
-  observeMaximized(listener: (maximized: boolean) => void): Promise<() => void>;
+  observeMaximized(
+    listener: (maximized: boolean) => void,
+    onError: (error: unknown) => void,
+  ): Promise<() => void>;
   observeCloseRequested?(guard: () => Promise<boolean>): Promise<() => void>;
 }
 
@@ -93,11 +96,34 @@ export const desktop: DesktopBridge = {
     if (isTauri()) await getCurrentWindow().close();
   },
   /** Report current and subsequent native maximize state; return cleanup for the resize listener or reject registration errors. */
-  async observeMaximized(listener) {
+  async observeMaximized(listener, onError) {
     if (!isTauri()) return () => {};
     const window = getCurrentWindow();
-    listener(await window.isMaximized());
-    return window.onResized(async () => listener(await window.isMaximized()));
+    let disposed = false;
+    let query = 0;
+    /** Publish only the newest native query while this subscription is still owned. */
+    async function refresh() {
+      const current = ++query;
+      const maximized = await window.isMaximized();
+      if (!disposed && current === query) listener(maximized);
+    }
+    const unlisten = await window.onResized(() => {
+      void refresh().catch((error) => {
+        if (!disposed) onError(error);
+      });
+    });
+    /** Release the host listener and suppress results from queries already in flight. */
+    function stop() {
+      disposed = true;
+      unlisten();
+    }
+    try {
+      await refresh();
+      return stop;
+    } catch (error) {
+      stop();
+      throw error;
+    }
   },
   /** Protect Alt+F4/taskbar close with the same awaited guard as the custom caption button. */
   async observeCloseRequested(guard) {
