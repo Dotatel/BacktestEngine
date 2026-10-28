@@ -45,6 +45,11 @@ import { optimization } from "@/lib/optimization";
 import { AssistantPanel } from "@/features/assistant/AssistantPanel";
 import { assistant } from "@/lib/assistant";
 import { savedRuns } from "@/lib/saved-runs";
+import { SettingsPage } from "@/features/settings/SettingsPage";
+import { ExtensionsPage } from "@/features/extensions/ExtensionsPage";
+import { extensions } from "@/lib/extensions";
+import { settings } from "@/lib/settings";
+import { updates } from "@/lib/updates";
 import type { SavedRunSelection } from "@/lib/saved-runs-contract";
 import { useWorkspaceFlush } from "./hooks/useWorkspaceFlush";
 import { useWorkspaceMenu } from "./hooks/useWorkspaceMenu";
@@ -79,6 +84,14 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
   const [optimizationBusy, setOptimizationBusy] = useState(false);
   const [validationBusy, setValidationBusy] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [utilityPage, setUtilityPage] = useState<
+    "settings" | "extensions" | null
+  >(null);
+  const settingsOpen = utilityPage === "settings";
+  const extensionsOpen = utilityPage === "extensions";
+  const utilityOpen = utilityPage !== null;
+  const settingsButton = useRef<HTMLButtonElement>(null);
+  const extensionsButton = useRef<HTMLButtonElement>(null);
   const [editorInstance, setEditorInstance] =
     useState<editor.IStandaloneCodeEditor | null>(null);
   const [commandError, setCommandError] = useState("");
@@ -156,15 +169,30 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
     void session.flush().catch(() => undefined);
   }
 
+  /** Restore keyboard focus to the persistent settings entry without remounting the workspace. */
+  function closeSettings() {
+    setUtilityPage(null);
+    settingsButton.current?.focus();
+  }
+
+  /** Restore the original puzzle entry's focus while retaining editor and workflow state. */
+  function closeExtensions() {
+    setUtilityPage(null);
+    extensionsButton.current?.focus();
+  }
+
   useWorkspaceMenu({
     workspace,
     editor: editorInstance,
-    buildVisible: activeStage === "build",
-    executionBusy: backtestBusy || optimizationBusy || validationBusy,
+    buildVisible: !utilityOpen && activeStage === "build",
+    executionBusy:
+      utilityOpen || backtestBusy || optimizationBusy || validationBusy,
     native: props.bridge.native,
-    explorerVisible: activeStage === "build" && !explorerCollapsed,
-    parametersVisible: activeStage === "build" && !inspectorCollapsed,
-    assistantVisible: assistantOpen,
+    explorerVisible:
+      !utilityOpen && activeStage === "build" && !explorerCollapsed,
+    parametersVisible:
+      !utilityOpen && activeStage === "build" && !inspectorCollapsed,
+    assistantVisible: !utilityOpen && assistantOpen,
     toggleExplorer: () => {
       if (activeStage === "build" || explorerCollapsed) toggleExplorer();
       setActiveStage("build");
@@ -173,7 +201,10 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
       if (activeStage === "build" || inspectorCollapsed) toggleInspector();
       setActiveStage("build");
     },
-    toggleAssistant: () => setAssistantOpen((open) => !open),
+    toggleAssistant: () => {
+      setUtilityPage(null);
+      setAssistantOpen((open) => !open);
+    },
     reportError: setCommandError,
     register: props.onMenuChange,
   });
@@ -184,40 +215,75 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
       aria-label="Build workspace"
       aria-busy={session.loading || project.busy || build.phase !== "idle"}
     >
-      <WorkspaceHeader
-        projectName={
-          project.project?.name ??
-          (openingStoredProject ? "Opening project" : "Build workspace")
-        }
-        projectRoot={
-          project.project?.root ?? session.session?.lastProject ?? ""
-        }
-        phase={build.phase}
-        stage={activeStage}
-        executionBusy={backtestBusy || optimizationBusy || validationBusy}
-        assistantOpen={assistantOpen}
-        onToggleAssistant={() => setAssistantOpen((open) => !open)}
-        canOptimize={Boolean(project.project && props.bridge.native)}
-        canReport={Boolean(project.project && props.bridge.native)}
-        canValidate={Boolean(project.project && props.bridge.native)}
-        canSave={documents.dirtyPaths.length > 0 && !project.busy}
-        canBuild={Boolean(project.project) && !project.busy}
-        canBacktest={Boolean(project.project && props.bridge.native)}
-        onSaveAll={() => void workspace.saveAll()}
-        onBuild={() => void workspace.buildProject()}
-        onCancel={() => void workspace.cancelBuild()}
-        onSelectStage={setActiveStage}
-      />
+      <div className="workspace-header-host" hidden={utilityOpen}>
+        <WorkspaceHeader
+          projectName={
+            project.project?.name ??
+            (openingStoredProject ? "Opening project" : "Build workspace")
+          }
+          projectRoot={
+            project.project?.root ?? session.session?.lastProject ?? ""
+          }
+          phase={build.phase}
+          stage={activeStage}
+          executionBusy={backtestBusy || optimizationBusy || validationBusy}
+          assistantOpen={assistantOpen}
+          onToggleAssistant={() => setAssistantOpen((open) => !open)}
+          canOptimize={Boolean(project.project && props.bridge.native)}
+          canReport={Boolean(project.project && props.bridge.native)}
+          canValidate={Boolean(project.project && props.bridge.native)}
+          canSave={documents.dirtyPaths.length > 0 && !project.busy}
+          canBuild={Boolean(project.project) && !project.busy}
+          canBacktest={Boolean(project.project && props.bridge.native)}
+          onSaveAll={() => void workspace.saveAll()}
+          onBuild={() => void workspace.buildProject()}
+          onCancel={() => void workspace.cancelBuild()}
+          onSelectStage={setActiveStage}
+        />
+      </div>
       <div className="workspace-body">
         <WorkspaceRail
-          appearance={props.appearance}
-          workspaceStyle={props.workspaceStyle}
-          onAppearanceChange={props.onAppearanceChange}
-          onWorkspaceStyleChange={props.onWorkspaceStyleChange}
-          onReviewSetup={props.onReviewSetup}
-          projectRoot={project.project?.root ?? null}
+          settingsOpen={settingsOpen}
+          extensionsOpen={extensionsOpen}
+          settingsButtonRef={settingsButton}
+          extensionsButtonRef={extensionsButton}
+          onOpenSettings={() => setUtilityPage("settings")}
+          onOpenExtensions={() => setUtilityPage("extensions")}
+          onOpenExplorer={() => {
+            setUtilityPage(null);
+            setActiveStage("build");
+          }}
         />
-        <div className="workspace-main">
+        {settingsOpen && (
+          <SettingsPage
+            appearance={props.appearance}
+            workspaceStyle={props.workspaceStyle}
+            onAppearanceChange={props.onAppearanceChange}
+            onWorkspaceStyleChange={props.onWorkspaceStyleChange}
+            onReviewSetup={props.onReviewSetup}
+            onClose={closeSettings}
+            project={project.project}
+            bridge={settings}
+            updatesBridge={updates}
+          />
+        )}
+        {extensionsOpen && (
+          <ExtensionsPage
+            bridge={extensions}
+            reportsBridge={reports}
+            projectRoot={project.project?.root ?? null}
+            onClose={closeExtensions}
+            onGoToReports={() => {
+              setUtilityPage(null);
+              setActiveStage("report");
+            }}
+            onOpenAssistant={() => {
+              setUtilityPage(null);
+              setAssistantOpen(true);
+            }}
+          />
+        )}
+        <div className="workspace-main" hidden={utilityOpen}>
           <WorkspaceBanners
             notice={
               commandError
@@ -448,7 +514,7 @@ export function BuildWorkspace(props: BuildWorkspaceProps) {
         </div>
         <aside
           className="workspace-assistant-dock"
-          hidden={!assistantOpen}
+          hidden={!assistantOpen || utilityOpen}
           aria-label="Assistant panel"
         >
           <AssistantPanel

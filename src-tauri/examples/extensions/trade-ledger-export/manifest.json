@@ -1,0 +1,17 @@
+{
+  "id": "trade-ledger-export",
+  "name": "Trade ledger export",
+  "version": "1.0.0",
+  "apiVersion": "1.0.0",
+  "description": "Export the closed-trade ledger from a saved backtest run as CSV.",
+  "permissions": ["commands"],
+  "contributes": {
+    "commands": [
+      {
+        "id": "report.export-csv",
+        "title": "Export trade ledger",
+        "category": "Reports"
+      }
+    ]
+  }
+}

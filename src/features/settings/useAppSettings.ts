@@ -17,7 +17,7 @@ export function useAppSettings(
   const generation = useRef(0);
   const pending = useRef(false);
 
-  /** Run one explicit action and suppress responses belonging to a closed or replaced dialog. */
+  /** Run one explicit action and suppress responses belonging to a closed or replaced settings page. */
   const perform = useCallback(
     async <T>(
       phase: string,

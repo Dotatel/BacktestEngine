@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import type { SettingsBridge, SettingsSnapshot } from "@/lib/settings-contract";
@@ -7,7 +7,7 @@ import {
   settingsSnapshot,
   unavailableRelease,
 } from "../../../tests/fixtures/app-settings";
-import { SettingsDialog } from "./SettingsDialog";
+import { SettingsPage } from "./SettingsPage";
 
 // jsdom omits pointer-capture APIs implemented by the native WebView and browser review tests.
 beforeAll(() => {
@@ -49,13 +49,14 @@ function bridges(
   return { settings, updates };
 }
 
-/** Render the real dialog with original setup callbacks kept separately injectable. */
+/** Render the real Settings page with original setup callbacks kept separately injectable. */
 function mount(settings: SettingsBridge, updates: UpdatesBridge) {
   const onAppearanceChange = vi.fn();
   const onWorkspaceStyleChange = vi.fn();
   const onReviewSetup = vi.fn();
+  const onClose = vi.fn();
   render(
-    <SettingsDialog
+    <SettingsPage
       appearance="dark"
       workspaceStyle="advanced"
       onAppearanceChange={onAppearanceChange}
@@ -63,23 +64,23 @@ function mount(settings: SettingsBridge, updates: UpdatesBridge) {
       onReviewSetup={onReviewSetup}
       bridge={settings}
       updatesBridge={updates}
-      trigger={<button>Open settings</button>}
+      onClose={onClose}
+      project={{
+        name: "Synthetic project",
+        root: "C:/Synthetic UI fixture/project",
+      }}
     />,
   );
-  return { onAppearanceChange, onWorkspaceStyleChange, onReviewSetup };
+  return { onAppearanceChange, onWorkspaceStyleChange, onReviewSetup, onClose };
 }
 
-describe("Settings dialog (synthetic DI)", () => {
-  it("does no request on mount, open or consent; only an explicit enabled Check now requests metadata", async () => {
+describe("Settings page (synthetic DI)", () => {
+  it("does no release request on mount or consent; only an explicit enabled Check now requests metadata", async () => {
     const { settings, updates } = bridges();
     mount(settings, updates);
-    expect(settings.load).not.toHaveBeenCalled();
     expect(updates.checkNow).not.toHaveBeenCalled();
-    await userEvent.click(
-      screen.getByRole("button", { name: "Open settings" }),
-    );
     await waitFor(() => expect(settings.load).toHaveBeenCalledOnce());
-    await userEvent.click(screen.getByRole("tab", { name: "Updates" }));
+    await userEvent.click(screen.getByRole("button", { name: "Updates" }));
     expect(screen.getByRole("button", { name: "Check now" })).toBeDisabled();
     await userEvent.click(
       screen.getByRole("combobox", { name: "Manual release checks" }),
@@ -105,16 +106,15 @@ describe("Settings dialog (synthetic DI)", () => {
   it("uses original theme/style callbacks and treats a canceled folder picker honestly", async () => {
     const { settings, updates } = bridges();
     const callbacks = mount(settings, updates);
-    await userEvent.click(
-      screen.getByRole("button", { name: "Open settings" }),
-    );
     await waitFor(() =>
       expect(
         screen.getByRole("button", { name: "Choose folder" }),
       ).toBeEnabled(),
     );
+    await userEvent.click(screen.getByRole("button", { name: "Appearance" }));
     await userEvent.click(screen.getByRole("combobox", { name: "Appearance" }));
     await userEvent.click(screen.getByRole("option", { name: "Light" }));
+    await userEvent.click(screen.getByRole("button", { name: "General" }));
     await userEvent.click(
       screen.getByRole("combobox", { name: "Workspace style" }),
     );
@@ -134,6 +134,10 @@ describe("Settings dialog (synthetic DI)", () => {
     expect(
       screen.getByText("Choose the destination in each export dialog"),
     ).toBeInTheDocument();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Back to workspace" }),
+    );
+    expect(callbacks.onClose).toHaveBeenCalledOnce();
   });
 
   it("requires a separate explicit corruption-recovery confirmation and displays the retained backup", async () => {
@@ -144,9 +148,6 @@ describe("Settings dialog (synthetic DI)", () => {
       problem: "Settings JSON is damaged. Original bytes are preserved.",
     });
     mount(settings, updates);
-    await userEvent.click(
-      screen.getByRole("button", { name: "Open settings" }),
-    );
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Original bytes are preserved",
     );
@@ -176,14 +177,13 @@ describe("Settings dialog (synthetic DI)", () => {
     settings.native = false;
     updates.native = false;
     mount(settings, updates);
-    await userEvent.click(
-      screen.getByRole("button", { name: "Open settings" }),
-    );
     expect(settings.load).not.toHaveBeenCalled();
     expect(
       screen.getByRole("button", { name: "Choose folder" }),
     ).toBeDisabled();
-    await userEvent.click(screen.getByRole("tab", { name: "Shortcuts" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Keyboard shortcuts" }),
+    );
     expect(screen.getByText("Save the active file")).toBeInTheDocument();
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
@@ -203,10 +203,7 @@ describe("Settings dialog (synthetic DI)", () => {
         "A newer stable release is available. Review it in your browser.",
     });
     mount(settings, updates);
-    await userEvent.click(
-      screen.getByRole("button", { name: "Open settings" }),
-    );
-    await userEvent.click(screen.getByRole("tab", { name: "Updates" }));
+    await userEvent.click(screen.getByRole("button", { name: "Updates" }));
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "Check now" })).toBeEnabled(),
     );
@@ -231,5 +228,81 @@ describe("Settings dialog (synthetic DI)", () => {
     expect(
       screen.queryByRole("button", { name: "Dismiss this version" }),
     ).not.toBeInTheDocument();
+  });
+  it("exposes category navigation, read-only project context and a focused page heading", async () => {
+    const { settings, updates } = bridges();
+    mount(settings, updates);
+    const navigation = screen.getByRole("navigation", {
+      name: "Settings categories",
+    });
+    expect(within(navigation).getAllByRole("button")).toHaveLength(5);
+    expect(
+      within(navigation).getByRole("button", { name: "General" }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(screen.getByText("Synthetic project")).toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    await userEvent.click(
+      within(navigation).getByRole("button", {
+        name: "Appearance",
+      }),
+    );
+    expect(
+      within(navigation).getByRole("button", {
+        name: "Appearance",
+      }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Appearance",
+      }),
+    ).toHaveFocus();
+    expect(
+      screen.queryByRole("combobox", { name: "Workspace style" }),
+    ).not.toBeInTheDocument();
+    expect(settings.load).toHaveBeenCalledOnce();
+    expect(updates.checkNow).not.toHaveBeenCalled();
+  });
+
+  it("retains an in-flight folder write across category navigation", async () => {
+    const { settings, updates } = bridges();
+    let complete: ((value: SettingsSnapshot) => void) | undefined;
+    settings.chooseExportDirectory = vi.fn(
+      () =>
+        new Promise<SettingsSnapshot>((resolve) => {
+          complete = resolve;
+        }),
+    );
+    mount(settings, updates);
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: "Choose folder" }),
+      ).toBeEnabled(),
+    );
+    await userEvent.click(
+      screen.getByRole("button", { name: "Choose folder" }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Appearance" }));
+    await userEvent.click(screen.getByRole("button", { name: "General" }));
+    expect(
+      screen.getByRole("button", { name: "Choose folder" }),
+    ).toBeDisabled();
+    await act(async () =>
+      complete!({
+        ...settingsSnapshot,
+        settings: {
+          ...settingsSnapshot.settings!,
+          defaultExportDirectory: "C:/Synthetic UI fixture/chosen",
+        },
+      }),
+    );
+    expect(
+      await screen.findByText("Default export folder saved."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("C:/Synthetic UI fixture/chosen"),
+    ).toBeInTheDocument();
+    expect(settings.chooseExportDirectory).toHaveBeenCalledOnce();
+    expect(settings.load).toHaveBeenCalledOnce();
   });
 });

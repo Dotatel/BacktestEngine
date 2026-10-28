@@ -260,8 +260,33 @@ pub(crate) fn import_folder(
         return Err("Choose a local folder with a supported path length.".into());
     }
     let bytes = bounded_file(&source.join("manifest.json"), MAX_MANIFEST_BYTES)?;
-    let manifest = parse_manifest(&bytes)?;
-    let hash = format!("{:x}", Sha256::digest(&bytes));
+    register_manifest(state, &bytes, source.to_string_lossy().into_owned())
+}
+
+/// Install one embedded, allowlisted data-only example after an explicit UI action; never enable it.
+pub(crate) fn install_example(state: &AppSettingsState, id: &str) -> Result<AppExtension, String> {
+    let bytes: &[u8] = match id {
+        "report-tools" => include_bytes!("../examples/extensions/report-tools/manifest.json"),
+        "trade-ledger-export" => {
+            include_bytes!("../examples/extensions/trade-ledger-export/manifest.json")
+        }
+        "html-reports" => include_bytes!("../examples/extensions/html-reports/manifest.json"),
+        _ => return Err("This bundled example extension is unavailable.".into()),
+    };
+    register_manifest(state, bytes, format!("bundled:{id}"))
+}
+
+/// Share bounded parsing, hash receipts and guarded disabled registration between local and bundled data.
+fn register_manifest(
+    state: &AppSettingsState,
+    bytes: &[u8],
+    original_directory: String,
+) -> Result<AppExtension, String> {
+    if bytes.len() as u64 > MAX_MANIFEST_BYTES {
+        return Err("The extension manifest exceeds its size limit.".into());
+    }
+    let manifest = parse_manifest(bytes)?;
+    let hash = format!("{:x}", Sha256::digest(bytes));
     fs::create_dir_all(&state.extensions_directory).map_err(|error| error.to_string())?;
     reject_reparse(&state.extensions_directory)?;
     let destination = state.extensions_directory.join(&manifest.id);
@@ -297,9 +322,9 @@ pub(crate) fn import_folder(
         id: manifest.id.clone(),
         sha256: hash,
         imported_at: chrono::Utc::now().to_rfc3339(),
-        original_directory: source.to_string_lossy().into_owned(),
+        original_directory,
     };
-    let write_result = write_registration(&destination, &bytes, &receipt);
+    let write_result = write_registration(&destination, bytes, &receipt);
     drop(store);
     if let Err(error) = write_result {
         cleanup_new_registration(&destination);
@@ -516,6 +541,15 @@ pub(crate) fn authorize_command(
 #[tauri::command]
 pub fn app_extensions_list(state: State<AppSettingsState>) -> Result<Vec<AppExtension>, String> {
     list(state.inner())
+}
+
+/// Install only a compiled-in example by its allowlisted identity, retaining explicit enablement.
+#[tauri::command]
+pub fn app_extensions_install_example(
+    id: String,
+    state: State<AppSettingsState>,
+) -> Result<AppExtension, String> {
+    install_example(state.inner(), &id)
 }
 
 /// Pick an explicitly selected local folder and copy only its validated manifest into the registry.

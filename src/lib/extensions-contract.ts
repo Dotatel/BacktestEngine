@@ -4,6 +4,10 @@ import type { ReportExportReceipt, SelectedReport } from "./reports-contract";
 export type ExtensionCommandId =
   "report.export-json" | "report.export-csv" | "report.export-html";
 
+/** Bundled declarative report examples available offline; installation never enables them. */
+export type ExampleExtensionId =
+  "report-tools" | "trade-ledger-export" | "html-reports";
+
 /** Experimental manifest contributes names only; it never contributes executable code. */
 export interface AppExtension {
   id: string;
@@ -28,6 +32,7 @@ export interface ExtensionsBridge {
   native: boolean;
   list(): Promise<AppExtension[]>;
   importFolder(): Promise<AppExtension | null>;
+  installExample(id: ExampleExtensionId): Promise<AppExtension>;
   setEnabled(
     id: string,
     manifestSha256: string | null,

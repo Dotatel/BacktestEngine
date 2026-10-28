@@ -857,6 +857,7 @@ pub fn run() {
             app_settings::app_settings_recover,
             app_extensions::app_extensions_list,
             app_extensions::app_extensions_import,
+            app_extensions::app_extensions_install_example,
             app_extensions::app_extensions_set_enabled,
             app_extensions::app_extensions_export,
             app_updates::app_updates_check,

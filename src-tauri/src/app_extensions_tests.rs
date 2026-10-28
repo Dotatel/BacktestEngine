@@ -141,3 +141,95 @@ fn one_broken_entry_does_not_hide_a_valid_extension_or_execute_its_files() {
         .iter()
         .any(|entry| entry.id == "report-tools" && entry.compatible));
 }
+
+#[test]
+fn bundled_examples_are_offline_data_only_and_require_explicit_enablement() {
+    let root = tempfile::tempdir().unwrap();
+    let current = state(root.path());
+    for (id, name, command_count) in [
+        ("report-tools", "Report tools", 3),
+        ("trade-ledger-export", "Trade ledger export", 1),
+        ("html-reports", "HTML reports", 1),
+    ] {
+        let entry = install_example(&current, id).unwrap();
+        assert_eq!(entry.id, id);
+        assert_eq!(entry.name, name);
+        assert_eq!(entry.version.as_deref(), Some("1.0.0"));
+        assert_eq!(entry.api_version.as_deref(), Some("1.0.0"));
+        assert_eq!(entry.permissions, vec!["commands"]);
+        assert_eq!(entry.commands.len(), command_count);
+        assert!(!entry.enabled);
+        assert!(entry.compatible);
+        let hash = entry.manifest_sha256.as_deref().unwrap();
+        assert!(authorize_command(&current, id, hash, entry.commands[0].id).is_err());
+        let folder = current.extensions_directory.join(id);
+        assert_eq!(fs::read_dir(&folder).unwrap().count(), 2);
+        let receipt: ManifestReceipt =
+            serde_json::from_slice(&fs::read(folder.join("receipt.json")).unwrap()).unwrap();
+        assert_eq!(receipt.original_directory, format!("bundled:{id}"));
+        set_enabled(&current, id, Some(hash), true).unwrap();
+        assert!(authorize_command(&current, id, hash, entry.commands[0].id).is_ok());
+        set_enabled(&current, id, None, false).unwrap();
+    }
+    let restarted = state(root.path());
+    let entries = list(&restarted).unwrap();
+    assert_eq!(entries.len(), 3);
+    assert!(entries
+        .iter()
+        .all(|entry| entry.compatible && !entry.enabled));
+    assert!(!restarted.read().unwrap().updates.enabled);
+}
+
+#[test]
+fn unknown_bundled_ids_do_not_create_preferences_or_a_registry() {
+    let root = tempfile::tempdir().unwrap();
+    let current = state(root.path());
+    for id in [
+        "claude",
+        "../report-tools",
+        "REPORT-TOOLS",
+        "report-tools/",
+        "",
+    ] {
+        assert!(install_example(&current, id)
+            .unwrap_err()
+            .contains("unavailable"));
+    }
+    assert!(!current.extensions_directory.exists());
+    assert!(!root.path().join("app-settings.json").exists());
+}
+
+#[test]
+fn installing_an_example_again_preserves_the_prior_manifest_and_enabled_state() {
+    let root = tempfile::tempdir().unwrap();
+    let current = state(root.path());
+    let entry = import_folder(&current, &source(root.path(), &manifest())).unwrap();
+    let hash = entry.manifest_sha256.as_deref().unwrap();
+    set_enabled(&current, "report-tools", Some(hash), true).unwrap();
+    let manifest_path = current
+        .extensions_directory
+        .join("report-tools/manifest.json");
+    let before = fs::read(&manifest_path).unwrap();
+    let settings_before = fs::read(root.path().join("app-settings.json")).unwrap();
+    assert!(install_example(&current, "report-tools")
+        .unwrap_err()
+        .contains("already installed"));
+    assert_eq!(fs::read(manifest_path).unwrap(), before);
+    assert_eq!(
+        fs::read(root.path().join("app-settings.json")).unwrap(),
+        settings_before
+    );
+    assert!(list(&current).unwrap()[0].enabled);
+}
+
+#[test]
+fn damaged_preferences_cannot_be_replaced_by_example_installation() {
+    let root = tempfile::tempdir().unwrap();
+    let current = state(root.path());
+    let settings_path = root.path().join("app-settings.json");
+    let bytes = b"{ damaged owner settings";
+    fs::write(&settings_path, bytes).unwrap();
+    assert!(install_example(&current, "report-tools").is_err());
+    assert_eq!(fs::read(settings_path).unwrap(), bytes);
+    assert!(!current.extensions_directory.join("report-tools").exists());
+}

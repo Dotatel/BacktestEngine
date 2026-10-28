@@ -1,32 +1,127 @@
-.app-settings-body {
+/* Full-page settings composition; shared shadcn controls retain their public geometry. */
+.app-settings-page {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  background: var(--background);
+  color: var(--foreground);
+}
+.app-settings-sidebar {
+  min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-height: 60vh;
-  overflow: auto;
-  min-width: 0;
+  border-right: 1px solid var(--border);
 }
-.app-settings-section {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--space-3);
-  padding-block: var(--space-3);
-  min-width: 0;
+.app-settings-sidebar__heading {
+  padding: var(--space-6) var(--space-4);
+  border-bottom: 1px solid var(--border);
 }
-.app-settings-section h3 {
-  margin: 0;
-  font-size: var(--type-small);
+.app-settings-sidebar__heading h2 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--type-lead);
   font-weight: 650;
+}
+.app-settings-categories {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  overflow: auto;
+}
+.app-settings-categories__label {
+  margin: 0 0 var(--space-1) var(--space-3);
+  font-size: var(--type-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--muted-foreground);
 }
-.app-settings-section p {
-  margin: 0;
+.app-settings-categories > button {
+  justify-content: flex-start;
 }
-.app-settings-field {
+.app-settings-sidebar__back {
+  margin-top: auto;
+  padding: var(--space-4) var(--space-3);
+  border-top: 1px solid var(--border);
+}
+.app-settings-body {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.app-settings-content {
+  max-width: 1248px;
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-12) var(--space-12);
+}
+.app-settings-heading {
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+.app-settings-heading h1 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--type-welcome);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  outline: none;
+}
+.app-settings-heading p {
+  margin: 0;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+.app-settings-section {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: var(--space-8);
+  padding-block: var(--space-8);
+  min-width: 0;
+  border-bottom: 1px solid var(--border);
+}
+.app-settings-section__intro h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--type-body);
+  font-weight: 650;
+}
+.app-settings-section__intro p {
+  max-width: 32ch;
+}
+.app-settings-section__rows {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.app-settings-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-6);
+  min-width: 0;
+}
+.app-settings-row + .app-settings-row {
+  padding-top: var(--space-4);
+  margin-top: var(--space-1);
+  border-top: 1px solid var(--border);
+}
+.app-settings-row__copy {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+.app-settings-row__label {
+  margin: 0;
+  font-size: var(--type-body);
+  font-weight: 500;
+}
+.app-settings-row__control {
+  min-width: 0;
+  max-width: 260px;
+  justify-self: end;
 }
 .app-settings-actions {
   display: flex;
@@ -40,7 +135,12 @@
   line-height: 1.6;
   color: var(--muted-foreground);
 }
+.app-settings-content > .app-settings-note,
+.app-settings-content > .app-settings-error {
+  margin-top: var(--space-4);
+}
 .app-settings-path {
+  margin: 0;
   font-size: var(--type-body);
   overflow-wrap: anywhere;
 }
@@ -54,13 +154,19 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  font-size: var(--type-small);
+  font-size: var(--type-body);
 }
 .app-settings-diagnostics > div {
   display: grid;
-  grid-template-columns: minmax(8rem, 0.8fr) minmax(0, 1.2fr);
-  gap: var(--space-3);
+  grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+}
+.app-settings-diagnostics > div:first-child {
+  padding-top: 0;
+}
+.app-settings-diagnostics > div + div {
+  border-top: 1px solid var(--border);
 }
 .app-settings-diagnostics dt {
   color: var(--muted-foreground);
@@ -68,6 +174,18 @@
 .app-settings-diagnostics dd {
   margin: 0;
   overflow-wrap: anywhere;
+}
+.app-settings-release-result,
+.app-settings-recovery {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+  padding-top: var(--space-4);
+}
+.app-settings-release-result p {
+  margin: 0;
 }
 .app-settings-release-notes {
   margin: 0;
@@ -77,4 +195,57 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   border: 1px solid var(--border);
+  max-width: 100%;
+}
+@media (max-width: 1200px) {
+  .app-settings-section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+  .app-settings-section__intro p {
+    max-width: 65ch;
+  }
+}
+@media (max-width: 900px) {
+  .app-settings-page {
+    grid-template-columns: 204px minmax(0, 1fr);
+  }
+  .app-settings-content {
+    padding: var(--space-6);
+  }
+  .app-settings-section {
+    padding-block: var(--space-6);
+  }
+  .app-settings-row {
+    gap: var(--space-3);
+  }
+  .app-settings-actions {
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 640px) {
+  .app-settings-page {
+    grid-template-columns: minmax(0, 1fr);
+    overflow: auto;
+  }
+  .app-settings-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-settings-categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+  .app-settings-categories__label {
+    grid-column: 1 / -1;
+  }
+  .app-settings-body {
+    overflow: visible;
+  }
+  .app-settings-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .app-settings-row__control {
+    justify-self: start;
+  }
 }

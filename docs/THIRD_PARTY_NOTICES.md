@@ -1,5 +1,7 @@
 # Third-party and retained-source notices
 
+- Extensions provider imagery: Claude and OpenCode reuse the owner-approved bundled onboarding artwork. The OpenAI Blossom displayed for the ChatGPT preview is the unchanged black SVG from the official [OpenAI 2025 logo package](https://cdn.openai.com/brand/OpenAI-Logos-2025.zip), with [OpenAI brand guidance](https://openai.com/brand/). Names and marks belong to their respective owners. Preview listings identify the service and do not imply an implemented connector, partnership or endorsement.
+
 - C# engine and Python validation: retained from the owner's existing BacktestEngine integration at commit `5fa3327`, under the included Apache-2.0 license. C# and validation source behavior is unchanged. Native adapters provide absolute paths and source snapshots without changing the retained engine algorithms.
 - shadcn/ui Button, Radio Group, Dialog and Tooltip: generated from the official registry using `shadcn@4.22.1 add button radio-group dialog --yes` and `add tooltip --yes`, 24 October 2026. Source: https://github.com/shadcn-ui/ui, MIT, copyright shadcn. Keep the upstream component source in `src/components/ui/`; branded composition lives outside it.
 - shadcn/ui Menubar and Context Menu: unchanged official Radix registry source added on 26 October 2026 from https://ui.shadcn.com/r/styles/new-york-v4/menubar.json and https://ui.shadcn.com/r/styles/new-york-v4/context-menu.json, MIT, copyright shadcn. They reuse the installed Radix UI dependency; workspace actions and tab transactions remain application-owned.

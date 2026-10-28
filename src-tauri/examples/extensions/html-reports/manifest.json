@@ -1,0 +1,17 @@
+{
+  "id": "html-reports",
+  "name": "HTML reports",
+  "version": "1.0.0",
+  "apiVersion": "1.0.0",
+  "description": "Create a shareable HTML report from a completed saved backtest run.",
+  "permissions": ["commands"],
+  "contributes": {
+    "commands": [
+      {
+        "id": "report.export-html",
+        "title": "Export HTML report",
+        "category": "Reports"
+      }
+    ]
+  }
+}

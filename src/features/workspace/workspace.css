@@ -18,6 +18,14 @@
   border-bottom: 1px solid var(--border);
   background: var(--background);
 }
+.workspace-header-host {
+  flex-shrink: 0;
+  min-width: 0;
+}
+.workspace-header-host[hidden],
+.workspace-main[hidden] {
+  display: none;
+}
 .workspace-project {
   display: flex;
   align-items: center;

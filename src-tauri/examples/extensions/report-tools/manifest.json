@@ -1,0 +1,27 @@
+{
+  "id": "report-tools",
+  "name": "Report tools",
+  "version": "1.0.0",
+  "apiVersion": "1.0.0",
+  "description": "Export saved backtest reports as JSON, CSV and HTML.",
+  "permissions": ["commands"],
+  "contributes": {
+    "commands": [
+      {
+        "id": "report.export-json",
+        "title": "Export original JSON",
+        "category": "Reports"
+      },
+      {
+        "id": "report.export-csv",
+        "title": "Export trade ledger",
+        "category": "Reports"
+      },
+      {
+        "id": "report.export-html",
+        "title": "Export HTML report",
+        "category": "Reports"
+      }
+    ]
+  }
+}

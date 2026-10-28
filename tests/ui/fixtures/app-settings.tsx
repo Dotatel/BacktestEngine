@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "../../../src/components/ui/button";
-import { SettingsDialog } from "../../../src/features/settings/SettingsDialog";
-import { ExtensionsDialog } from "../../../src/features/extensions/ExtensionsDialog";
+import { SettingsPage } from "../../../src/features/settings/SettingsPage";
+import { ExtensionsPage } from "../../../src/features/extensions/ExtensionsPage";
 import type { SettingsBridge } from "../../../src/lib/settings-contract";
 import type { ExtensionsBridge } from "../../../src/lib/extensions-contract";
 import type { Appearance, WorkspaceStyle } from "../../../src/lib/preferences";
@@ -22,6 +22,10 @@ function Fixture() {
   const [appearance, setAppearance] = useState<Appearance>(
     params.get("theme") === "light" ? "light" : "dark",
   );
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [extensionsOpen, setExtensionsOpen] = useState(false);
+  const extensionsTrigger = useRef<HTMLButtonElement>(null);
+  const [navigationNotice, setNavigationNotice] = useState("");
   const [style, setStyle] = useState<WorkspaceStyle>("advanced");
   const [draft, setDraft] = useState(
     "Unsaved synthetic editor draft — UI fixture only",
@@ -30,7 +34,9 @@ function Fixture() {
     let snapshot = structuredClone(settingsSnapshot);
     snapshot.settings!.defaultExportDirectory =
       "C:/Synthetic UI fixture/export-folder";
-    let entries = structuredClone([reportTools, isolatedExtension]);
+    let entries = params.has("empty")
+      ? []
+      : structuredClone([reportTools, isolatedExtension]);
     if (params.has("corrupt"))
       snapshot = {
         ...snapshot,
@@ -79,6 +85,21 @@ function Fixture() {
       native: true,
       list: async () => entries,
       importFolder: async () => null,
+      installExample: async (id) => {
+        const names = {
+          "report-tools": "Report tools",
+          "trade-ledger-export": "Trade ledger export",
+          "html-reports": "HTML reports",
+        };
+        const entry = {
+          ...structuredClone(reportTools),
+          id,
+          name: names[id],
+          enabled: false,
+        };
+        entries = [...entries, entry];
+        return entry;
+      },
       setEnabled: async (id, _hash, enabled) => {
         entries = entries.map((entry) =>
           entry.id === id ? { ...entry, enabled } : entry,
@@ -93,7 +114,8 @@ function Fixture() {
       extensions,
       reports: {
         native: true,
-        selected: async () => extensionReport,
+        selected: async () =>
+          params.has("no-report") ? null : extensionReport,
         exportSaved: async () => null,
       },
     };
@@ -104,43 +126,80 @@ function Fixture() {
   return (
     <main
       aria-label="Synthetic settings and extension review"
-      style={{
-        padding: "var(--space-6)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--space-4)",
-      }}
+      style={{ height: "100vh", display: "flex", flexDirection: "column" }}
     >
-      <h1>Synthetic presentation fixtures</h1>
-      <p>
-        Injected settings, extension metadata and saved-run identity. This page
-        performs no native operations and makes no release or trading claim.
-      </p>
-      <div style={{ display: "flex", gap: "var(--space-2)" }}>
-        <SettingsDialog
+      {settingsOpen && (
+        <SettingsPage
           appearance={appearance}
           workspaceStyle={style}
           onAppearanceChange={setAppearance}
           onWorkspaceStyleChange={setStyle}
           onReviewSetup={() => {}}
+          onClose={() => setSettingsOpen(false)}
+          project={{
+            name: "Synthetic project",
+            root: "C:/Synthetic UI fixture/project",
+          }}
           bridge={bridge.settings}
           updatesBridge={bridge.updates}
-          trigger={<Button variant="outline">Workspace settings</Button>}
         />
-        <ExtensionsDialog
+      )}
+      {extensionsOpen && (
+        <ExtensionsPage
           bridge={bridge.extensions}
           reportsBridge={bridge.reports}
           projectRoot={extensionReport.projectRoot}
-          trigger={<Button variant="outline">Extensions</Button>}
+          onClose={() => {
+            setExtensionsOpen(false);
+            requestAnimationFrame(() => extensionsTrigger.current?.focus());
+          }}
+          onGoToReports={() => {
+            setExtensionsOpen(false);
+            setNavigationNotice("Reports navigation requested");
+          }}
+          onOpenAssistant={() => {
+            setExtensionsOpen(false);
+            setNavigationNotice("Assistant navigation requested");
+          }}
         />
+      )}
+      <div hidden={settingsOpen || extensionsOpen}>
+        <div
+          style={{
+            padding: "var(--space-6)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-4)",
+          }}
+        >
+          <h1>Synthetic presentation fixtures</h1>
+          <p>
+            Injected settings, extension metadata and saved-run identity. This
+            page performs no native operations and makes no release or trading
+            claim.
+          </p>
+          <div style={{ display: "flex", gap: "var(--space-2)" }}>
+            <Button variant="outline" onClick={() => setSettingsOpen(true)}>
+              Workspace settings
+            </Button>
+            <Button
+              ref={extensionsTrigger}
+              variant="outline"
+              onClick={() => setExtensionsOpen(true)}
+            >
+              Extensions
+            </Button>
+          </div>
+          <label htmlFor="fixture-draft">Unsaved synthetic draft</label>
+          <textarea
+            id="fixture-draft"
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+          />
+          <p>Selected workspace style: {style}</p>
+          {navigationNotice && <p role="status">{navigationNotice}</p>}
+        </div>
       </div>
-      <label htmlFor="fixture-draft">Unsaved synthetic draft</label>
-      <textarea
-        id="fixture-draft"
-        value={draft}
-        onChange={(event) => setDraft(event.target.value)}
-      />
-      <p>Selected workspace style: {style}</p>
     </main>
   );
 }

@@ -1,7 +1,10 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 /** Check actual clipping bounds, including the line indicator painted below a standard shadcn tab. */
-async function expectContainedTabs(strip: Locator) {
+async function expectContainedTabs(strip: Locator, focusExpected = false) {
+  await strip.evaluate(async () => {
+    await document.fonts.ready;
+  });
   await expect
     .poll(() =>
       strip
@@ -9,33 +12,43 @@ async function expectContainedTabs(strip: Locator) {
         .evaluate((element) => getComputedStyle(element, "::after").opacity),
     )
     .toBe("1");
-  const geometry = await strip.evaluate((element) => {
-    const active = element.querySelector<HTMLElement>(
-      '[role="tab"][data-state="active"]',
-    )!;
-    const bounds = element.getBoundingClientRect();
-    const tab = active.getBoundingClientRect();
-    const marker = getComputedStyle(active, "::after");
-    const style = getComputedStyle(active);
-    const focusExtent =
-      parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
-    return {
-      overflow: element.scrollHeight - element.clientHeight,
-      overflowY: getComputedStyle(element).overflowY,
-      markerOpacity: marker.opacity,
-      markerBottom:
-        tab.bottom -
-        parseFloat(style.borderBottomWidth) -
-        parseFloat(marker.bottom),
-      clipBottom: bounds.top + element.clientHeight,
-      focusVisible: active.matches(":focus-visible"),
-      focusPaintFits:
-        tab.top - focusExtent >= bounds.top &&
-        tab.bottom + focusExtent <= bounds.top + element.clientHeight &&
-        tab.left - focusExtent >= bounds.left &&
-        tab.right + focusExtent <= bounds.left + element.clientWidth,
-    };
-  });
+  const measure = () =>
+    strip.evaluate((element) => {
+      const active = element.querySelector<HTMLElement>(
+        '[role="tab"][data-state="active"]',
+      )!;
+      const bounds = element.getBoundingClientRect();
+      const tab = active.getBoundingClientRect();
+      const marker = getComputedStyle(active, "::after");
+      const style = getComputedStyle(active);
+      const focusExtent =
+        parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+      return {
+        overflow: element.scrollHeight - element.clientHeight,
+        overflowY: getComputedStyle(element).overflowY,
+        markerOpacity: marker.opacity,
+        markerBottom:
+          tab.bottom -
+          parseFloat(style.borderBottomWidth) -
+          parseFloat(marker.bottom),
+        clipBottom: bounds.top + element.clientHeight,
+        focusVisible: active.matches(":focus-visible"),
+        focusPaintFits:
+          tab.top - focusExtent >= bounds.top &&
+          tab.bottom + focusExtent <= bounds.top + element.clientHeight &&
+          tab.left - focusExtent >= bounds.left &&
+          tab.right + focusExtent <= bounds.left + element.clientWidth,
+      };
+    });
+  await expect
+    .poll(async () => {
+      const current = await measure();
+      return focusExpected
+        ? current.focusVisible && current.focusPaintFits
+        : !current.focusVisible || current.focusPaintFits;
+    })
+    .toBe(true);
+  const geometry = await measure();
   expect(geometry.overflow).toBe(0);
   expect(geometry.overflowY).toBe("hidden");
   expect(geometry.markerOpacity).toBe("1");
@@ -118,7 +131,7 @@ for (const appearance of ["dark", "light"]) {
       await expect
         .poll(() => backtestStrip.evaluate((element) => element.scrollLeft))
         .toBeGreaterThan(0);
-      await expectContainedTabs(backtestStrip);
+      await expectContainedTabs(backtestStrip, true);
       await expect(
         page.getByRole("button", { name: "Export trades", exact: true }),
       ).toBeVisible();
@@ -139,19 +152,34 @@ for (const appearance of ["dark", "light"]) {
       await page
         .getByRole("button", { name: "Workspace settings", exact: true })
         .click();
-      const settings = page.getByRole("dialog", {
+      const settings = page.getByRole("region", {
         name: "Workspace settings",
         exact: true,
       });
-      const settingsStrip = settings.locator(".workspace-tabs-scroll");
-      await expectContainedTabs(settingsStrip);
-      await settings.getByRole("tab", { name: "General", exact: true }).focus();
-      await page.keyboard.press("End");
+      const navigation = settings.getByRole("navigation", {
+        name: "Settings categories",
+      });
       await expect(
-        settings.getByRole("tab", { name: "Diagnostics", exact: true }),
-      ).toBeFocused();
-      await expectContainedTabs(settingsStrip);
+        navigation.getByRole("button", { name: "General", exact: true }),
+      ).toHaveAttribute("aria-current", "page");
+      await navigation
+        .getByRole("button", { name: "Diagnostics", exact: true })
+        .click();
+      await expect(
+        navigation.getByRole("button", { name: "Diagnostics", exact: true }),
+      ).toHaveAttribute("aria-current", "page");
+      await expect(settings.getByRole("tablist")).toHaveCount(0);
+      expect(
+        await settings.evaluate(
+          (element) => element.scrollWidth - element.clientWidth,
+        ),
+      ).toBe(0);
       const body = settings.locator(".app-settings-body");
+      expect(
+        await body.evaluate(
+          (element) => element.scrollWidth - element.clientWidth,
+        ),
+      ).toBe(0);
       await body.evaluate((element) => {
         element.style.maxHeight = "180px";
         element.scrollTop = 40;
@@ -159,11 +187,6 @@ for (const appearance of ["dark", "light"]) {
       await expect
         .poll(() => body.evaluate((element) => element.scrollTop))
         .toBeGreaterThan(0);
-      expect(
-        await settingsStrip.evaluate(
-          (element) => element.scrollHeight - element.clientHeight,
-        ),
-      ).toBe(0);
 
       await openManyFiles(page, appearance);
       const buildStrip = page.locator(".results-bar .workspace-tabs-scroll");
@@ -171,7 +194,7 @@ for (const appearance of ["dark", "light"]) {
       await buildStrip
         .getByRole("tab", { name: "Output", exact: true })
         .focus();
-      await expectContainedTabs(buildStrip);
+      await expectContainedTabs(buildStrip, true);
       const files = page.locator(".file-tabs");
       await page
         .getByRole("tab", { name: "StrategyDocument00.cs", exact: true })

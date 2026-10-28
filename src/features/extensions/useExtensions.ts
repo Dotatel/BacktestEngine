@@ -3,6 +3,7 @@ import type {
   AppExtension,
   ExtensionCommandId,
   ExtensionsBridge,
+  ExampleExtensionId,
 } from "@/lib/extensions-contract";
 import type { ReportsBridge, SelectedReport } from "@/lib/reports-contract";
 import { errorMessage } from "@/lib/preferences";
@@ -22,7 +23,7 @@ export function useExtensions(
   const generation = useRef(0);
   const pending = useRef(false);
 
-  /** Serialize explicit UI operations and ignore receipts after the dialog or project changes. */
+  /** Serialize explicit UI operations and ignore receipts after the page or project changes. */
   const perform = useCallback(
     async <T>(
       phase: string,
@@ -120,6 +121,23 @@ export function useExtensions(
     );
   }
 
+  /** Install one bundled declarative example after a click; enabling remains a separate reviewed action. */
+  function installExample(id: ExampleExtensionId) {
+    return perform(
+      "installing",
+      async () => ({
+        installed: await bridge.installExample(id),
+        entries: await bridge.list(),
+      }),
+      ({ installed, entries }) => {
+        setEntries(entries);
+        setMessage(
+          `Installed ${installed.name}. Review its commands before enabling.`,
+        );
+      },
+    );
+  }
+
   /** The host rechecks the imported hash before persisting an enable action. */
   function setEnabled(entry: AppExtension, enabled: boolean) {
     return perform(
@@ -174,6 +192,7 @@ export function useExtensions(
     message,
     refresh,
     importFolder,
+    installExample,
     setEnabled,
     exportReport,
   };

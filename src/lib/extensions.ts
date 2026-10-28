@@ -6,6 +6,12 @@ export const extensions: ExtensionsBridge = {
   native: isTauri(),
   list: () => invoke("app_extensions_list"),
   importFolder: () => invoke("app_extensions_import"),
+  installExample: (id) =>
+    isTauri()
+      ? invoke("app_extensions_install_example", { id })
+      : Promise.reject(
+          new Error("Open the desktop app to install bundled examples."),
+        ),
   setEnabled: (id, manifestSha256, enabled) =>
     invoke("app_extensions_set_enabled", { id, manifestSha256, enabled }),
   exportReport: (extension, command, report) =>
